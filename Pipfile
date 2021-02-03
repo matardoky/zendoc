@@ -8,6 +8,10 @@ django = "*"
 install = "*"
 django-debug-toolbar = "*"
 django-cors-headers = "*"
+django-allauth = "*"
+django-rest-auth = "*"
+djangorestframework = "*"
+django-filter = "*"
 
 [dev-packages]
 

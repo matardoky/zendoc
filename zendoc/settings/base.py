@@ -11,7 +11,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
+
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'main.apps.MainConfig',
+    'django_filters',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -108,3 +123,43 @@ LOGGING = {
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
 ]
+#allauth
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_EMAIL_FIELD = 'email'
+
+OLD_PASSWORD_FIELD_ENABLED = True 
+
+#RESTAUTH 
+REST_AUTH_SERIALIZERS = {
+   # 'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
+    #'TOKEN_SERIALIZER': 'users.serializers.TokenSerializer',
+}
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    #'REGISTER_SERIALIZER' : 'users.serializers.CustomRegisterSerializer'
+}
+
+#RESTFRAMEWORK
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+       
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+}
+
+AUTH_USER_MODEL = "main.User"
