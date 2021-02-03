@@ -14,7 +14,7 @@ class CompanyManager(models.Manager):
 class Company(models.Model):
     objects = CompanyManager()
     name = models.CharField(max_length=150)
-    slug = models.SlugField(max_length=150)
+    slug = models.SlugField(blank=True)
     uuid = models.UUIDField(
         db_index=True,
         default=uuid_lib.uuid4,
