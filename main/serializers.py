@@ -1,19 +1,26 @@
 from rest_framework import serializers
-from models.users import User, Company
+from main.models.users import User, Company
 from rest_auth.registration.serializers import RegisterSerializer
 
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = "__all__" 
+        fields = ["name", "slug", "uuid"]
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta: 
         model = User
-        fields = "__all__"
+        fields = '__all__'
 
-class Register(serializers.Serializer):
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        
+
+
+
 
 
     

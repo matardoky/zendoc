@@ -12,6 +12,8 @@ django-allauth = "*"
 django-rest-auth = "*"
 djangorestframework = "*"
 django-filter = "*"
+django-extensions = "*"
+pygraphviz = "*"
 
 [dev-packages]
 

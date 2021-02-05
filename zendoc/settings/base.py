@@ -24,6 +24,7 @@ INSTALLED_APPS = [
 
     'main.apps.MainConfig',
     'django_filters',
+    'django_extensions',
 ]
 
 SITE_ID = 1
@@ -139,12 +140,12 @@ OLD_PASSWORD_FIELD_ENABLED = True
 
 #RESTAUTH 
 REST_AUTH_SERIALIZERS = {
-   # 'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
+   'USER_DETAILS_SERIALIZER': 'main.serializers.UserSerializer',
     #'TOKEN_SERIALIZER': 'users.serializers.TokenSerializer',
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    #'REGISTER_SERIALIZER' : 'users.serializers.CustomRegisterSerializer'
+    #'REGISTER_SERIALIZER' : 'main.serializers.CustomRegisterSerializer'
 }
 
 #RESTFRAMEWORK
