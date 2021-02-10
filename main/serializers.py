@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from main.models.users import User, Company
+from main.models.authenticate import User, Company
 from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 
@@ -8,12 +8,15 @@ class CompanySerializer(serializers.ModelSerializer):
         model = Company
         fields = ["name", "slug", "uuid"]
 
-
+    def validate_name(self, value):
+        if Company.objects.filter(name__iexact=value):
+            raise serializers.ValidationError("company existe déjà")
+        return value
+        
 class UserSerializer(serializers.ModelSerializer):
     class Meta: 
         model = User
         fields = '__all__'
-
 
 class CustomRegisterSerializer(RegisterSerializer):
     is_admin = serializers.BooleanField()
@@ -26,10 +29,9 @@ class CustomRegisterSerializer(RegisterSerializer):
             'password1': self.validated_data.get('password1', ''),
             'password2': self.validated_data.get('password2', ''),
             'is_admin': self.validated_data.get('is_admin', ''),
-
             'company': self.validated_data.get('company', ''),
         }
-
+ 
     def save(self,request): 
         adapter = get_adapter()
         user = adapter.new_user(request)
