@@ -25,11 +25,11 @@ class Base(models.Model):
     def __str__(self):
         return self.name
 
-class Motif(models.Models): 
+class Motif(models.Model): 
 
     class Type(models.TextChoices):
         NEW="NEW","NOUVEAU PATIENT",
-        FOLLOWED="FOLLOWED", "PATIENT SUIVI"
+        FOLLOWED="FOLLOWED", "PATIENT SUIVI",
         ALL="ALL", "TOUTES GATEGORIES"
 
     company = models.ForeignKey(
@@ -42,7 +42,7 @@ class Motif(models.Models):
     duration_min = models.TimeField()
     reservable = models.BooleanField(default=True)
     type = models.CharField(
-        max_length=50
+        max_length=50,
         choices=Type.choices,
         default=Type.ALL
     )
@@ -61,13 +61,15 @@ class Calendar(models.Model):
         on_delete=models.CASCADE
     )
     name = models.CharField(max_length=150)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
 
 class Planning(models.Model):
     calendar = models.ForeignKey(
-        calendar, 
+        Calendar, 
         on_delete=models.CASCADE
     )
     start = models.DateTimeField(db_index=True)
@@ -79,6 +81,8 @@ class Planning(models.Model):
         blank=True,
         related_name="creator"
     )
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
     rule = models.ForeignKey(
         Rule, 
         on_delete=models.SET_NULL,
@@ -89,3 +93,7 @@ class Planning(models.Model):
         Motif,
         on_delete=models.CASCADE
     )
+
+class Occurrence(models.Model):
+    pass
+

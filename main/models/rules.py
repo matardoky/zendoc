@@ -21,7 +21,19 @@ from django.utils.translation import gettext_lazy as _
 class Rule(models.Model):
 
     class Freqs(models.TextChoices):
-        pass
+        YEARLY="YEARLY", _("Yearly"),
+        MONTHLY="MONTHLY", _("Monthly"),
+        WEEKLY="WEEKLY", _("Weekly"),
+        DAILY="DAILY", _("Daily"),
+        HOURLY="HOURLY", _("Hourly"),
+        MINUTELY="MINUTELY", _("Minutely"),
+        SECONDLY="SECONDLY", _("Secondly")
 
-    pass
+    frequency= models.CharField(
+        max_length=50, 
+        choices=Freqs.choices, 
+        default=Freqs.WEEKLY 
+    )
+    params= models.TextField(blank=True)
+    _week_day= {"MO": MO, "TU": TU, "WE": WE, "TH": TH, "FR": FR, "SA": SA, "SU": SU}
 
