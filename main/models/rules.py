@@ -41,7 +41,8 @@ class Rule(models.Model):
 
     company = models.ForeignKey(
         Company, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE, 
+        null=True
     )
 
     def rrule_frequency(self):
