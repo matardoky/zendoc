@@ -68,6 +68,9 @@ class Rule(models.Model):
     def get_params(self):
         pass
 
+    def __str__(self):
+        return 
+
 
     
 

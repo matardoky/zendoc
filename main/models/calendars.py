@@ -67,7 +67,12 @@ class Calendar(models.Model):
     def __str__(self):
         return self.name
 
-class Planning(models.Model):
+class Event(models.Model):
+
+    class Type(models.TextChoices):
+        RECCURENCE="RECCURENCE"," OUVERTURE RECCURENTE", 
+        EXCEPTION="EXCEPTION", "OUVERTURE EXCEPTIONNELLE"
+
     calendar = models.ForeignKey(
         Calendar, 
         on_delete=models.CASCADE
@@ -81,6 +86,11 @@ class Planning(models.Model):
         blank=True,
         related_name="creator"
     )
+    end_recurring_period= models.DateTimeField(
+        null=True,
+        blank=True,
+        db_index=True,
+    )
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     rule = models.ForeignKey(
@@ -89,11 +99,27 @@ class Planning(models.Model):
         blank=True,
         null=True
     )
+    type = models.CharField(
+        max_length=50,
+        choices= Type.choices,
+        default= Type.EXCEPTION
+    )
     motif = models.ForeignKey(
         Motif,
         on_delete=models.CASCADE
     )
 
 class Occurrence(models.Model):
-    pass
+    event= models.ForeignKey(
+        Event, 
+        on_delete=models.CASCADE,
+    )
+    start= models.DateTimeField(db_index=True)
+    end= models.DateTimeField(db_index=True)
+    created_on= models.DateTimeField(auto_now_add=True)
+    updated_on= models.DateTimeField(auto_now=True)
+    
+
+
+    
 
