@@ -39,14 +39,13 @@ class Rule(models.Model):
     params= models.TextField(blank=True)
     _week_day= {"MO": MO, "TU": TU, "WE": WE, "TH": TH, "FR": FR, "SA": SA, "SU": SU}
 
-    company = models.ForeignKey(
+    company= models.ForeignKey(
         Company, 
-        on_delete=models.CASCADE, 
-        null=True
+        on_delete=models.CASCADE
     )
 
     def rrule_frequency(self):
-        compatibility_dict = {
+        compatibility_dict= {
             "YEARLY": YEARLY,
             "MONTHLY": MONTHLY,
             "WEEKLY": WEEKLY, 

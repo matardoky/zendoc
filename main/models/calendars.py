@@ -32,21 +32,18 @@ class Motif(models.Model):
         FOLLOWED="FOLLOWED", "PATIENT SUIVI",
         ALL="ALL", "TOUTES GATEGORIES"
 
-    company = models.ForeignKey(
-        Company, 
-        on_delete=models.CASCADE
-    )
-    name = models.CharField(max_length=150)
-    duration = models.TimeField()
-    duration_max = models.TimeField()
-    duration_min = models.TimeField()
-    reservable = models.BooleanField(default=True)
-    type = models.CharField(
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    name= models.CharField(max_length=150)
+    duration= models.TimeField()
+    duration_max= models.TimeField()
+    duration_min= models.TimeField()
+    reservable= models.BooleanField(default=True)
+    type= models.CharField(
         max_length=50,
         choices=Type.choices,
         default=Type.ALL
     )
-    color = models.CharField(
+    color= models.CharField(
         max_length=50,
         blank=True,
         null=True
@@ -56,10 +53,7 @@ class Motif(models.Model):
         return self.name
 
 class Calendar(models.Model):
-    user = models.ForeignKey(
-        User, 
-        on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -68,15 +62,7 @@ class Calendar(models.Model):
         return self.name
 
 class Event(models.Model):
-
-    class Type(models.TextChoices):
-        RECCURENCE="RECCURENCE"," OUVERTURE RECCURENTE", 
-        EXCEPTION="EXCEPTION", "OUVERTURE EXCEPTIONNELLE"
-
-    calendar = models.ForeignKey(
-        Calendar, 
-        on_delete=models.CASCADE
-    )
+    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     start = models.DateTimeField(db_index=True)
     end = models.DateTimeField(db_index=True)
     creator = models.ForeignKey(
@@ -91,33 +77,35 @@ class Event(models.Model):
         blank=True,
         db_index=True,
     )
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-    rule = models.ForeignKey(
+    created_on= models.DateTimeField(auto_now_add=True)
+    updated_on= models.DateTimeField(auto_now=True)
+    rule= models.ForeignKey(
         Rule, 
         on_delete=models.SET_NULL,
         blank=True,
         null=True
     )
-    type = models.CharField(
+    motif= models.ForeignKey(Motif, on_delete=models.CASCADE)
+
+class Occurrence(models.Model):
+
+    class Type(models.TextChoices):
+        RECCURENCE="RECCURENCE"," OUVERTURE RECCURENTE", 
+        EXCEPTION="EXCEPTION", "OUVERTURE EXCEPTIONNELLE"
+
+    event= models.ForeignKey(Event, on_delete=models.CASCADE)
+    start= models.DateTimeField(db_index=True)
+    end= models.DateTimeField(db_index=True)
+    original_start= models.DateTimeField()
+    orginal_end= models.DateTimeField()
+    cancelled= models.BooleanField(default=False)
+    created_on= models.DateTimeField(auto_now_add=True)
+    updated_on= models.DateTimeField(auto_now=True)
+    type= models.CharField(
         max_length=50,
         choices= Type.choices,
         default= Type.EXCEPTION
     )
-    motif = models.ForeignKey(
-        Motif,
-        on_delete=models.CASCADE
-    )
-
-class Occurrence(models.Model):
-    event= models.ForeignKey(
-        Event, 
-        on_delete=models.CASCADE,
-    )
-    start= models.DateTimeField(db_index=True)
-    end= models.DateTimeField(db_index=True)
-    created_on= models.DateTimeField(auto_now_add=True)
-    updated_on= models.DateTimeField(auto_now=True)
     
 
 
