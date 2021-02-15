@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from main.models.authenticate import User, Company
+from main.models.rules import Rule
+
 from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 
@@ -45,7 +47,11 @@ class CustomRegisterSerializer(RegisterSerializer):
         return user
     
         
-
+class RuleSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Rule
+        fields = ["frequency", "_week_day"]
 
 
 

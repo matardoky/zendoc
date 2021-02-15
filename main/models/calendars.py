@@ -62,10 +62,10 @@ class Calendar(models.Model):
         return self.name
 
 class Event(models.Model):
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
-    start = models.DateTimeField(db_index=True)
-    end = models.DateTimeField(db_index=True)
-    creator = models.ForeignKey(
+    calendar= models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    start= models.DateTimeField(db_index=True)
+    end= models.DateTimeField(db_index=True)
+    creator= models.ForeignKey(
         User, 
         on_delete=models.SET_NULL, 
         null=True,
