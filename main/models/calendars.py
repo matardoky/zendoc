@@ -1,7 +1,9 @@
+from dateutil import rrule
 from django.db import models
 
 from .authenticate import Company, User
 from .rules import Rule
+from .utils import OccurrenceReplacer
 
 class Address(models.Model):
     company = models.ForeignKey(
@@ -86,6 +88,42 @@ class Event(models.Model):
         null=True
     )
     motif= models.ForeignKey(Motif, on_delete=models.CASCADE)
+
+    def _create_occurrence(self, occ_start, occ_end=None):
+        """Create an Occurrence instance"""
+        if not occ_end:
+            occ_end = occ_start + (self.end - self.start)
+        return Occurrence(
+            event=self,
+            start=occ_start,
+            end=occ_end,
+            original_start=occ_start,
+            original_end=occ_end
+        )
+
+    def _get_date_gen(self, rr, start, end):
+        """Return a generator to create the start dates for occurrences"""
+        date = rr.after(start)
+        while end and date <= end or not(end):
+            yield date
+            date = rr.after(date)
+    
+    def _get_occurrence_gen(self, start, end):
+        """Computes all occurrences for this event from start to end"""
+        length = self.end - self.start
+        if self.rule:
+            if self.end_recurring_period and end and (self.end_recurring_period < end):
+                end = self.end_recurring_period
+            occ_start_gen = self._get_date_gen(
+                self
+            )
+    
+    def get_rrule_object(self):
+        """Returns the rrule object for this ``Event``."""
+        if self.rule:
+            params = self.rule.get_params()
+            frequency = self.rule.rrule_frequency()
+            return rrule.rrule(frequency, params)
 
 class Occurrence(models.Model):
 

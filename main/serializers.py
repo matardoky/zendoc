@@ -51,7 +51,7 @@ class RuleSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Rule
-        fields = ["frequency", "_week_day"]
+        fields = ["frequency", "params"]
 
 
 
