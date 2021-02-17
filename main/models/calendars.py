@@ -108,6 +108,13 @@ class Event(models.Model):
             yield date
             date = rr.after(date)
     
+    def get_rrule_object(self):
+        """Returns the rrule object for this ``Event``."""
+        if self.rule:
+            params = self.rule.get_params()
+            frequency = self.rule.rrule_frequency()
+            return rrule.rrule(frequency, dtstart= self.start, **params)
+    
     def _get_occurrence_gen(self, start, end):
         """Computes all occurrences for this event from start to end"""
         length = self.end - self.start
@@ -115,15 +122,37 @@ class Event(models.Model):
             if self.end_recurring_period and end and (self.end_recurring_period < end):
                 end = self.end_recurring_period
             occ_start_gen = self._get_date_gen(
-                self
+                self.get_rrule_object(),
+                start-length,
+                end
             )
-    
-    def get_rrule_object(self):
-        """Returns the rrule object for this ``Event``."""
-        if self.rule:
-            params = self.rule.get_params()
-            frequency = self.rule.rrule_frequency()
-            return rrule.rrule(frequency, params)
+            occ_start = next(occ_start_gen)
+            while not end or (end and occ_start <= end):
+                occ_end = occ_start + length
+                yield self._create_occurrence(occ_start, occ_end)
+                occ_start = next(occ_start_gen)
+        else:
+            if (not end or self.start < end) and self.end >= start:
+                occ_start_gen = self._get_date_gen(
+                    rrule.rrule(
+                        "DAILY",
+                        dtstart=self.start
+                    ),
+                    start - length,
+                    self.end
+                )
+                try:
+                    occ_start = next(occ_start_gen)
+                    while not end or (end and occ_start <= end):
+                        occ_end = occ_start + length
+                        yield self._create_occurrence(occ_start, occ_end)
+                        occ_start = next(occ_start_gen)
+                except StopIteration:
+                    pass
+        
+    def get_occurences(self, start, end=None):
+        """Returns all occurrences from start to end"""
+        pass
 
 class Occurrence(models.Model):
 
