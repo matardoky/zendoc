@@ -10,8 +10,10 @@ def monday_of_week(year, week):
     Returns a datetime for the monday of the given week of the given year.
     """
     str_time = time.strptime('{0} {1} 1'.format(year, week), '%Y %W %w')
-    date = timezone.datetime(year=str_time.tm_year, month=str_time.tm_mon,
-                             day=str_time.tm_mday, tzinfo=timezone.utc)
+    date = timezone.datetime(
+        year=str_time.tm_year, month=str_time.tm_mon,
+        day=str_time.tm_mday, tzinfo=timezone.utc
+        )
     if timezone.datetime(year, 1, 4).isoweekday() > 4:
         # ISO 8601 where week 1 is the first week that has at least 4 days in
         # the current year
