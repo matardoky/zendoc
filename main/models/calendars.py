@@ -150,9 +150,40 @@ class Event(models.Model):
                 except StopIteration:
                     pass
         
-    def get_occurences(self, start, end=None):
-        """Returns all occurrences from start to end"""
-        pass
+    def get_occurrences(self, start, end=None):
+        """Returns all occurrences from start to end."""
+        # get persistent occurrences
+        persistent_occurrences = self.occurrences.all()
+
+        # setup occ_replacer with p_occs
+        occ_replacer = OccurrenceReplacer(persistent_occurrences)
+
+        # compute own occurrences according to rule that overlap with the
+        # period
+        occurrence_gen = self._get_occurrence_gen(start, end)
+        # get additional occs, that we need to take into concern
+        additional_occs = occ_replacer.get_additional_occurrences(
+            start, end)
+        occ = next(occurrence_gen)
+        while not end or (occ.start < end or any(additional_occs)):
+            if occ_replacer.has_occurrence(occ):
+                p_occ = occ_replacer.get_occurrence(occ)
+
+                # if the persistent occ falls into the period, replace it
+                if (end and p_occ.start < end) and p_occ.end >= start:
+                    estimated_occ = p_occ
+            else:
+                # if there is no persistent match, use the original occ
+                estimated_occ = occ
+
+            if any(additional_occs) and (
+                    estimated_occ.start == additional_occs[0].start):
+                final_occ = additional_occs.pop(0)
+            else:
+                final_occ = estimated_occ
+            if not final_occ.cancelled:
+                yield final_occ
+            occ = next(occurrence_gen)
 
 class Occurrence(models.Model):
 
