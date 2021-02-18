@@ -118,8 +118,8 @@ class Event(models.Model):
 class Occurrence(models.Model):
 
     class Type(models.TextChoices):
-        RECCURENCE="RECCURENCE"," OUVERTURE RECCURENTE", 
-        EXCEPTION="EXCEPTION", "OUVERTURE EXCEPTIONNELLE"
+        RECCURENCE="RECCURENCE","OUVERTURE RECCURENTE", 
+        EXCEPTION="EXCEPTION","OUVERTURE EXCEPTIONNELLE"
 
     event= models.ForeignKey(Event, on_delete=models.CASCADE)
     start= models.DateTimeField(db_index=True)
