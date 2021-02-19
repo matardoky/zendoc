@@ -121,7 +121,7 @@ class Occurrence(models.Model):
         RECCURENCE="RECCURENCE","OUVERTURE RECCURENTE", 
         EXCEPTION="EXCEPTION","OUVERTURE EXCEPTIONNELLE"
 
-    event= models.ForeignKey(Event, on_delete=models.CASCADE)
+    event= models.ForeignKey(Event, on_delete=models.CASCADE, related_name="occurrences")
     start= models.DateTimeField(db_index=True)
     end= models.DateTimeField(db_index=True)
     original_start= models.DateTimeField()
