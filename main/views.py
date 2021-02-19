@@ -21,3 +21,7 @@ class RuleView(ListCreateAPIView):
     serializer_class = RuleSerializer
 
 
+class CalendarView(ListCreateAPIView):
+    pass
+
+

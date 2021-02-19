@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from main.models.authenticate import User, Company
 from main.models.rules import Rule
+from main.models.calendars import Calendar
 
 from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
@@ -54,6 +55,11 @@ class RuleSerializer(serializers.ModelSerializer):
         fields = ["frequency", "params"]
 
 
-
+class CalendarSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Calendar
+        fields = ["name", "created_on", "updated_on"]
+        
 
     
