@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 
+import {Button} from "antd"
+
 function App() {
   return (
     <div className="App">
@@ -16,6 +18,7 @@ function App() {
           rel="noopener noreferrer"
         >
           Learn React
+          <Button>Learn Python django</Button>
         </a>
       </header>
     </div>
