@@ -131,14 +131,13 @@ class Occurrence(models.Model):
     cancelled= models.BooleanField(default=False)
     created_on= models.DateTimeField(auto_now_add=True)
     updated_on= models.DateTimeField(auto_now=True)
-    type= models.CharField(
-        max_length=50,
-        choices= Type.choices,
-        default= Type.EXCEPTION
-    )
+    type= models.CharField(max_length=50, choices= Type.choices, default= Type.EXCEPTION)
 
 
     class EventSerializer(serializers.ModelSerializer):
         class Meta: 
             model: Event
             fields = ('__all__')
+
+    class OccurrenceSerializer(serializers.ModelSerializer):
+        pass
