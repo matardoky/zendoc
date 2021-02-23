@@ -17,6 +17,7 @@ from dateutil.rrule import (
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 
 from .authenticate import Company
 
@@ -91,7 +92,10 @@ class Rule(models.Model):
         return "Rule {} params {}".format(self.name, self.params)
     
 
-
+class RuleSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model= Rule
+        fields= ('__all__')
     
 
 

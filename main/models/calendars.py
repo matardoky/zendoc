@@ -1,5 +1,6 @@
 from django.db import models
 from .authenticate import Company, User
+from rest_framework import serializers
 
 class Address(models.Model):
     company = models.ForeignKey(
@@ -58,6 +59,30 @@ class Calendar(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SpecialtySerializer(serializers.ModelSerializer):
+    pass
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model= Address
+        fields= ('__all__')
+
+class BaseSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model= Base
+        fields= ('__all__')
+
+class MotifSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Motif
+        fields= ('__all__')
+
+class CalendarSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model= Calendar
+        fields= ('__all__')
 
 
     

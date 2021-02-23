@@ -5,6 +5,8 @@ from .rules import Rule
 from .calendars import Calendar, Motif
 from .utils import OccurrenceReplacer
 
+from rest_framework import serializers
+
 class Event(models.Model):
     calendar= models.ForeignKey(Calendar, on_delete=models.CASCADE)
     start= models.DateTimeField(db_index=True)
@@ -134,3 +136,9 @@ class Occurrence(models.Model):
         choices= Type.choices,
         default= Type.EXCEPTION
     )
+
+
+    class EventSerializer(serializers.ModelSerializer):
+        class Meta: 
+            model: Event
+            fields = ('__all__')
