@@ -56,10 +56,10 @@ class RuleSerializer(serializers.ModelSerializer):
 
 
 class CalendarSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Calendar
-        fields = ["name", "created_on", "updated_on"]
+        fields = ("name", )
         
 
     

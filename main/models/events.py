@@ -1,11 +1,32 @@
 from dateutil import rrule
 from django.db import models
 
-from .rules import Rule
-from .calendars import Calendar, Motif
-from .utils import OccurrenceReplacer
+from main.models.authenticate import User
+from main.models.rules import Rule
+from main.models.calendars import Calendar, Motif
+from main.models.utils import OccurrenceReplacer
 
 from rest_framework import serializers
+
+freq_dict_order = {
+    "YEARLY": 0,
+    "MONTHLY": 1,
+    "WEEKLY": 2,
+    "DAILY": 3,
+    "HOURLY": 4,
+    "MINUTELY": 5,
+    "SECONDLY": 6,
+}
+param_dict_order = {
+    "byyearday": 1,
+    "bymonth": 1,
+    "bymonthday": 2,
+    "byweekno": 2,
+    "byweekday": 3,
+    "byhour": 4,
+    "byminute": 5,
+    "bysecond": 6,
+}
 
 class Event(models.Model):
     calendar= models.ForeignKey(Calendar, on_delete=models.CASCADE)
@@ -31,7 +52,18 @@ class Event(models.Model):
         blank=True,
         null=True
     )
-    motif= models.ForeignKey(Motif, on_delete=models.CASCADE)
+
+    @property
+    def seconds(self):
+        return (self.end - self.start).total_seconds()
+
+    @property
+    def minutes(self):
+        return float(self.seconds) / 60
+
+    @property
+    def hours(self):
+        return float(self.seconds) / 3600
 
     def get_occurrences(self, start, end, clear_prefetch=True):
        
@@ -43,16 +75,13 @@ class Event(models.Model):
         occurrences = self._get_occurrence_list(start, end)
         final_occurrences = []
         for occ in occurrences:
-            # replace occurrences with their persisted counterparts
             if occ_replacer.has_occurrence(occ):
                 p_occ = occ_replacer.get_occurrence(occ)
-                # ...but only if they are within this period
                 if p_occ.start < end and p_occ.end >= start:
                     final_occurrences.append(p_occ)
             else:
                 final_occurrences.append(occ)
-        # then add persisted occurrences which originated outside of this period but now
-        # fall within it
+        
         final_occurrences += occ_replacer.get_additional_occurrences(start, end)
         return final_occurrences
 
@@ -132,15 +161,12 @@ class Event(models.Model):
                 o_starts.append(closest_start)
 
             occs = start_rule.between(start, end, inc=True)
-            # The occurrence that start on the end of the timespan is potentially
-            # included above, lets remove if thats the case.
+            
             if len(occs) > 0:
                 if occs[-1] == end:
                     occs.pop()
-            # Add the occurrences found inside timespan
             o_starts.extend(occs)
 
-            # Create the Occurrence objects for the found start dates
             for o_start in o_starts:
                 o_start = tzinfo.localize(o_start)
                 if use_naive:
@@ -151,7 +177,6 @@ class Event(models.Model):
                     occurrences.append(occurrence)
             return occurrences
         else:
-            # check if event is in the period
             if self.start < end and self.end > start:
                 return [self._create_occurrence(self.start)]
             else:
@@ -227,7 +252,6 @@ class Event(models.Model):
             return event_params
 
         for param in rule_params:
-            # start date influences rule params
             if (
                 param in param_dict_order
                 and param_dict_order[param] > freq_order

@@ -12,5 +12,10 @@ urlpatterns = [
         "test",
         views.RuleView.as_view(),
         name="rule_params"
+    ), 
+    path(
+        "calendar", 
+        views.CalendarView.as_view(),
+        name="calendar_list"
     )
 ]
