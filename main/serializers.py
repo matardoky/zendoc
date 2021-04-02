@@ -66,13 +66,12 @@ class CalendarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Calendar
-        fields = ("name", )
+        fields = ("name", "uuid",)
 
 class EventSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Event
-        fields = ("calendar", "start", "end", "rule",)
+        fields = ("calendar", "start", "end", "rule", "uuid",)
 
     def get_fields(self, *args, **kwargs):
         fields = super(EventSerializer, self).get_fields(*args, **kwargs)

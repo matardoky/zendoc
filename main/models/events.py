@@ -1,4 +1,6 @@
 from dateutil import rrule
+import uuid as uuid_lib
+
 from django.db import models
 
 from main.models.authenticate import User
@@ -52,6 +54,8 @@ class Event(models.Model):
         blank=True,
         null=True
     )
+    uuid= models.UUIDField(db_index=True, default= uuid_lib.uuid4, editable=True)
+
 
     @property
     def seconds(self):
