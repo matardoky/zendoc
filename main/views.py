@@ -10,11 +10,13 @@ from main.serializers import CompanySerializer, RuleSerializer
 from main.models.authenticate import Company, User
 from main.models.rules import Rule
 from main.models.calendars import Calendar
+from main.models.events import Event
 
 from main.filters import IsUserFilterBackend
 
 from main.serializers import (
-    CalendarSerializer
+    CalendarSerializer, 
+    EventSerializer
 )
 
 
@@ -39,5 +41,10 @@ class RuleView(ListCreateAPIView):
 class CalendarView(UserMixin, ListCreateAPIView):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
+
+class EventView(ListCreateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = (IsAuthenticated, )
 
 

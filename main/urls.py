@@ -17,5 +17,10 @@ urlpatterns = [
         "calendar", 
         views.CalendarView.as_view(),
         name="calendar_list"
+    ), 
+    path(
+        "event",
+        views.EventView.as_view(),
+        name="event_list"
     )
 ]

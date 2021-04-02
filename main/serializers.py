@@ -1,10 +1,17 @@
 from rest_framework import serializers
-from main.models.authenticate import User, Company
-from main.models.rules import Rule
-from main.models.calendars import Calendar
 
 from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
+
+from main.models.authenticate import User, Company
+from main.models.rules import Rule
+from main.models.calendars import Calendar
+from main.models.events import Event
+
+
+class StringSerializer(serializers.StringRelatedField):
+    def to_internal_value(self, value):
+        return value
 
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
@@ -60,6 +67,18 @@ class CalendarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calendar
         fields = ("name", )
+
+class EventSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Event
+        fields = ("calendar", "start", "end", "rule",)
+
+    def get_fields(self, *args, **kwargs):
+        fields = super(EventSerializer, self).get_fields(*args, **kwargs)
+        request = self.context['request']
+        fields['calendar'].queryset = fields['calendar'].queryset.filter(user=request.user)
+        return fields
         
 
     
