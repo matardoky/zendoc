@@ -31,6 +31,10 @@ param_dict_order = {
 }
 
 class Event(models.Model):
+    class Type(models.TextChoices):
+        RECCURENCE="OUVERTURE RECCURENTE","OUVERTURE RECCURENTE", 
+        EXCEPTION="OUVERTURE EXCEPTIONNELLE","OUVERTURE EXCEPTIONNELLE"
+
     calendar= models.ForeignKey(Calendar, on_delete=models.CASCADE)
     start= models.DateTimeField(db_index=True)
     end= models.DateTimeField(db_index=True)
@@ -55,7 +59,11 @@ class Event(models.Model):
         null=True
     )
     uuid= models.UUIDField(db_index=True, default= uuid_lib.uuid4, editable=True)
-
+    type= models.CharField(
+        max_length=50, 
+        choices= Type.choices, 
+        default= Type.RECCURENCE
+    )
 
     @property
     def seconds(self):
@@ -314,10 +322,6 @@ class Event(models.Model):
 
 class Occurrence(models.Model):
 
-    class Type(models.TextChoices):
-        RECCURENCE="RECCURENCE","OUVERTURE RECCURENTE", 
-        EXCEPTION="EXCEPTION","OUVERTURE EXCEPTIONNELLE"
-
     event= models.ForeignKey(Event, on_delete=models.CASCADE, related_name="occurrences")
     start= models.DateTimeField(db_index=True)
     end= models.DateTimeField(db_index=True)
@@ -326,7 +330,6 @@ class Occurrence(models.Model):
     cancelled= models.BooleanField(default=False)
     created_on= models.DateTimeField(auto_now_add=True)
     updated_on= models.DateTimeField(auto_now=True)
-    type= models.CharField(max_length=50, choices= Type.choices, default= Type.EXCEPTION)
 
 
     class EventSerializer(serializers.ModelSerializer):

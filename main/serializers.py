@@ -69,15 +69,29 @@ class CalendarSerializer(serializers.ModelSerializer):
         fields = ("name", "uuid",)
 
 class EventSerializer(serializers.ModelSerializer):
+    uuid = serializers.ReadOnlyField()
+    type = serializers.ReadOnlyField()
     class Meta:
         model = Event
-        fields = ("calendar", "start", "end", "rule", "uuid",)
+        fields = ("uuid","calendar", "start", "end", "rule", "type")
 
     def get_fields(self, *args, **kwargs):
         fields = super(EventSerializer, self).get_fields(*args, **kwargs)
         request = self.context['request']
         fields['calendar'].queryset = fields['calendar'].queryset.filter(user=request.user)
         return fields
+
+    def to_representation(self, instance): 
+        return {
+            "uuid":instance.uuid,
+            "calendar": instance.calendar.uuid,
+            "start": instance.start,
+            "end": instance.end,
+            "rule":instance.rule,
+            "type": instance.type
+        }
+   
+
         
 
     
