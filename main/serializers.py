@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
+from django.utils.translation import gettext_lazy as _
 
 from main.models.authenticate import User, Company
 from main.models.rules import Rule
@@ -66,14 +67,15 @@ class CalendarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Calendar
-        fields = ("name", "uuid",)
+        fields = ("uuid", "name", )
 
 class EventSerializer(serializers.ModelSerializer):
     uuid = serializers.ReadOnlyField()
     type = serializers.ReadOnlyField()
+    
     class Meta:
         model = Event
-        fields = ("uuid","calendar", "start", "end", "rule", "type")
+        fields = ("uuid","calendar", "start", "end", "rule", "end_recurring_period","type")
 
     def get_fields(self, *args, **kwargs):
         fields = super(EventSerializer, self).get_fields(*args, **kwargs)
@@ -81,16 +83,23 @@ class EventSerializer(serializers.ModelSerializer):
         fields['calendar'].queryset = fields['calendar'].queryset.filter(user=request.user)
         return fields
 
-    def to_representation(self, instance): 
+    def validate(self, data):
+        if "start" in data and "end" in data:
+            if data["end"] <= data["start"]:
+                raise serializers.ValidationError(
+                    _("The end time must be later than start time.")
+                )
+        return data
+
+    """ def to_representation(self, instance): 
         return {
             "uuid":instance.uuid,
             "calendar": instance.calendar.uuid,
             "start": instance.start,
             "end": instance.end,
-            "rule":instance.rule,
             "type": instance.type
-        }
-   
+        } """
+
 
         
 

@@ -19,7 +19,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from .authenticate import Company
+from main.models.authenticate import Company, User
+
 
 class Rule(models.Model):
 
@@ -31,7 +32,7 @@ class Rule(models.Model):
         HOURLY="HOURLY", _("Hourly"),
         MINUTELY="MINUTELY", _("Minutely"),
         SECONDLY="SECONDLY", _("Secondly")
-
+    name = models.CharField(max_length=32)
     frequency= models.CharField(
         max_length=50, 
         choices=Freqs.choices, 
@@ -41,8 +42,10 @@ class Rule(models.Model):
     _week_day= {"MO": MO, "TU": TU, "WE": WE, "TH": TH, "FR": FR, "SA": SA, "SU": SU}
 
     company= models.ForeignKey(
-        Company, 
-        on_delete=models.CASCADE
+        Company,
+        on_delete=models.SET_NULL, 
+        null=True,
+        blank=True
     )
 
     def rrule_frequency(self):
@@ -92,10 +95,5 @@ class Rule(models.Model):
         return "Rule {} params {}".format(self.name, self.params)
     
 
-class RuleSerializer(serializers.ModelSerializer):
-    class Meta: 
-        model= Rule
-        fields= ('__all__')
-    
 
 
