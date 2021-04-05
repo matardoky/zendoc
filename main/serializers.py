@@ -57,14 +57,14 @@ class CustomRegisterSerializer(RegisterSerializer):
     
         
 class RuleSerializer(serializers.ModelSerializer):
-    
+    uuid = serializers.ReadOnlyField()
     class Meta:
         model = Rule
-        fields = ["frequency", "params"]
+        fields = ["uuid", "frequency", "params"]
 
 
 class CalendarSerializer(serializers.ModelSerializer):
-
+    uuid = serializers.ReadOnlyField()
     class Meta:
         model = Calendar
         fields = ("uuid", "name", )
@@ -72,6 +72,8 @@ class CalendarSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     uuid = serializers.ReadOnlyField()
     type = serializers.ReadOnlyField()
+    
+    rule = RuleSerializer()
     
     class Meta:
         model = Event
@@ -91,14 +93,23 @@ class EventSerializer(serializers.ModelSerializer):
                 )
         return data
 
-    """ def to_representation(self, instance): 
+    def create(self, request, *args, **kwargs):
+        rules_data = self.validated_data.pop("rule")
+        rule_data= Rule.objects.create(**rules_data)
+        event = Event.objects.create(**self.validated_data, rule=rule_data)
+        return event
+
+    def to_representation(self, instance):
         return {
-            "uuid":instance.uuid,
-            "calendar": instance.calendar.uuid,
+            "uuid": instance.uuid,
             "start": instance.start,
             "end": instance.end,
+            "calendar": instance.uuid,
+            "rule": instance.rule.uuid,
+            "end_recurring_period": instance.end_recurring_period,
             "type": instance.type
-        } """
+        }
+
 
 
         

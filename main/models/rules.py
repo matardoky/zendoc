@@ -14,6 +14,8 @@ from dateutil.rrule import (
     MINUTELY,
     SECONDLY
 )
+import uuid as uuid_lib
+
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -32,7 +34,8 @@ class Rule(models.Model):
         HOURLY="HOURLY", _("Hourly"),
         MINUTELY="MINUTELY", _("Minutely"),
         SECONDLY="SECONDLY", _("Secondly")
-    name = models.CharField(max_length=32)
+
+    uuid= models.UUIDField(db_index=True, default= uuid_lib.uuid4, editable=True)
     frequency= models.CharField(
         max_length=50, 
         choices=Freqs.choices, 
@@ -50,6 +53,7 @@ class Rule(models.Model):
 
     def rrule_frequency(self):
         compatibility_dict= {
+            "None":None,
             "YEARLY": YEARLY,
             "MONTHLY": MONTHLY,
             "WEEKLY": WEEKLY, 
@@ -92,7 +96,7 @@ class Rule(models.Model):
         return dict(param_dict)
 
     def __str__(self):
-        return "Rule {} params {}".format(self.name, self.params)
+        return "Rule {} params {}".format(self.frequency, self.params)
     
 
 

@@ -48,3 +48,5 @@ class EventView(ListCreateAPIView):
     permission_classes = (IsAuthenticated, )
 
 
+
+
