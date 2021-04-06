@@ -65,20 +65,19 @@ class RuleSerializer(serializers.ModelSerializer):
 
 
 class CalendarSerializer(serializers.ModelSerializer):
-    uuid = serializers.ReadOnlyField()
+    company = StringSerializer()
     class Meta:
         model = Calendar
-        fields = ("uuid", "name", )
+        fields = ("uuid","name", "created_on", "updated_on", "company" )
+        read_only_fields =("uuid", "created_on", "updated_on", "company")
 
 class EventSerializer(serializers.ModelSerializer):
-    uuid = serializers.ReadOnlyField()
-    type = serializers.ReadOnlyField()
-    
+   
     rule = RuleSerializer()
-    
     class Meta:
         model = Event
         fields = ("uuid","calendar", "start", "end", "rule", "end_recurring_period","type")
+        read_only_fields = ("uuid", "type")
 
     def get_fields(self, *args, **kwargs):
         fields = super(EventSerializer, self).get_fields(*args, **kwargs)
@@ -103,19 +102,12 @@ class EventSerializer(serializers.ModelSerializer):
             event = Event.objects.create(**self.validated_data)
         return event
 
-"""     def to_representation(self, instance):
-        return {
-            "uuid": instance.uuid,
-            "start": instance.start,
-            "end": instance.end,
-            "calendar": instance.uuid,
-            "rule": instance.rule.uuid,
-            "end_recurring_period": instance.end_recurring_period,
-            "type": instance.type
-        } """
 
 
-
+class EventListSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model= Event
+        fields =("__all__")
         
 
     

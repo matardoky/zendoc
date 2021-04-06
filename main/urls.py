@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 
 from . import views
@@ -6,6 +6,7 @@ from . import views
 router = DefaultRouter()
 
 router.register("event", views.EventViewSet)
+router.register("calendar", views.CalendarViewSet)
 
 urlpatterns = [
     path(
@@ -13,13 +14,11 @@ urlpatterns = [
         view= views.CompanyListView.as_view(), 
         name= "company_list"
     ), 
-
     path(
-        "calendar", 
-        views.CalendarView.as_view(),
-        name="calendar_list"
-    ), 
-    path(
+        "event_list", 
+        views.EventAPIView.as_view()
+    ),
+    re_path(
         '', 
         include(router.urls)
     )
