@@ -57,6 +57,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     
         
 class RuleSerializer(serializers.ModelSerializer):
+
     uuid = serializers.ReadOnlyField()
     class Meta:
         model = Rule
@@ -95,11 +96,14 @@ class EventSerializer(serializers.ModelSerializer):
 
     def create(self, request, *args, **kwargs):
         rules_data = self.validated_data.pop("rule")
-        rule_data= Rule.objects.create(**rules_data)
-        event = Event.objects.create(**self.validated_data, rule=rule_data)
+        if rules_data['frequency'] is not None: 
+            rule_data= Rule.objects.create(**rules_data)
+            event = Event.objects.create(**self.validated_data, rule=rule_data)
+        else:
+            event = Event.objects.create(**self.validated_data)
         return event
 
-    def to_representation(self, instance):
+"""     def to_representation(self, instance):
         return {
             "uuid": instance.uuid,
             "start": instance.start,
@@ -108,7 +112,7 @@ class EventSerializer(serializers.ModelSerializer):
             "rule": instance.rule.uuid,
             "end_recurring_period": instance.end_recurring_period,
             "type": instance.type
-        }
+        } """
 
 
 

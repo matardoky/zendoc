@@ -5,6 +5,7 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView
 )
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
+from rest_framework import viewsets
 
 from main.serializers import CompanySerializer, RuleSerializer
 from main.models.authenticate import Company, User
@@ -42,7 +43,7 @@ class CalendarView(UserMixin, ListCreateAPIView):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
 
-class EventView(ListCreateAPIView):
+class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = (IsAuthenticated, )

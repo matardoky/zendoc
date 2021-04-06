@@ -39,7 +39,8 @@ class Rule(models.Model):
     frequency= models.CharField(
         max_length=50, 
         choices=Freqs.choices, 
-        default=Freqs.WEEKLY 
+        default=Freqs.WEEKLY,
+        null=True
     )
     params= models.TextField(blank=True)
     _week_day= {"MO": MO, "TU": TU, "WE": WE, "TH": TH, "FR": FR, "SA": SA, "SU": SU}
@@ -53,7 +54,7 @@ class Rule(models.Model):
 
     def rrule_frequency(self):
         compatibility_dict= {
-            "None":None,
+            
             "YEARLY": YEARLY,
             "MONTHLY": MONTHLY,
             "WEEKLY": WEEKLY, 
