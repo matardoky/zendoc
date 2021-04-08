@@ -36,6 +36,7 @@ class Event(models.Model):
         EXCEPTION="OUVERTURE EXCEPTIONNELLE","OUVERTURE EXCEPTIONNELLE"
 
     calendar= models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100, blank=True)
     start= models.DateTimeField(db_index=True)
     end= models.DateTimeField(db_index=True)
     creator= models.ForeignKey(
@@ -323,6 +324,7 @@ class Event(models.Model):
 class Occurrence(models.Model):
 
     event= models.ForeignKey(Event, on_delete=models.CASCADE, related_name="occurrences")
+    title = models.CharField(max_length=100, blank=True)
     start= models.DateTimeField(db_index=True)
     end= models.DateTimeField(db_index=True)
     original_start= models.DateTimeField()
@@ -330,6 +332,11 @@ class Occurrence(models.Model):
     cancelled= models.BooleanField(default=False)
     created_on= models.DateTimeField(auto_now_add=True)
     updated_on= models.DateTimeField(auto_now=True)
+
+    def __init__(self, *args, **kwargs):
+       super(Occurrence, self).__init__(*args, **kwargs)
+       if not self.title and self.event_id:
+           self.title = self.event.title
 
 
     class EventSerializer(serializers.ModelSerializer):

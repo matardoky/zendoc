@@ -68,8 +68,8 @@ class CalendarSerializer(serializers.ModelSerializer):
     company = StringSerializer()
     class Meta:
         model = Calendar
-        fields = ("uuid","name", "created_on", "updated_on", "company" )
-        read_only_fields =("uuid", "created_on", "updated_on", "company")
+        fields = ("uuid","name", "slug", "created_on", "updated_on", "company" )
+        read_only_fields =("uuid", "slug", "created_on", "updated_on", "company")
 
 class EventSerializer(serializers.ModelSerializer):
    

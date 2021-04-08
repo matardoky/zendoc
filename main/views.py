@@ -15,6 +15,7 @@ from rest_framework.generics import (
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
@@ -22,7 +23,7 @@ from main.serializers import CompanySerializer, RuleSerializer
 from main.models.authenticate import Company, User
 from main.models.rules import Rule
 from main.models.calendars import Calendar
-from main.models.events import Event
+from main.models.events import Event,Occurrence
 
 from main.filters import IsUserFilterBackend
 
@@ -70,7 +71,7 @@ class EventAPIView(APIView):
         serializer = EventListSerializer(queryset, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
-
+@api_view(["GET"])
 def api_occurrences(request):
     start = request.GET.get("start")
     end = request.GET.get("end")
@@ -84,7 +85,7 @@ def api_occurrences(request):
 
     return JsonResponse(response_data, safe=False)
 
-
+@api_view(["GET"])
 def _api_occurrences(start, end, calendar_slug, timezone):
 
     if not start or not end:
@@ -128,15 +129,7 @@ def _api_occurrences(start, end, calendar_slug, timezone):
     else:
         calendars = Calendar.objects.all()
     response_data = []
-    # Algorithm to get an id for the occurrences in fullcalendar (NOT THE SAME
-    # AS IN THE DB) which are always unique.
-    # Fullcalendar thinks that all their "events" with the same "event.id" in
-    # their system are the same object, because it's not really built around
-    # the idea of events (generators)
-    # and occurrences (their events).
-    # Check the "persisted" boolean value that tells it whether to change the
-    # event, using the "event_id" or the occurrence with the specified "id".
-    # for more info https://github.com/llazzaro/django-scheduler/pull/169
+    
     i = 1
     if Occurrence.objects.all().count() > 0:
         i = Occurrence.objects.latest("id").id + 1

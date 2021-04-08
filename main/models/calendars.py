@@ -1,6 +1,7 @@
 import uuid as uuid_lib
 from django.db import models
-from .authenticate import Company, User
+from django.utils.text import slugify
+from main.models.authenticate import Company, User
 from rest_framework import serializers
 
 class Address(models.Model):
@@ -48,9 +49,18 @@ class Calendar(models.Model):
     updated_on= models.DateTimeField(auto_now=True)
     company= models.ForeignKey(Company, on_delete=models.CASCADE)
     uuid= models.UUIDField(db_index=True, default= uuid_lib.uuid4, editable=True)
+    slug = models.SlugField(blank=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+       self.slug = slugify(self.name)
+       super(Calendar, self).save(*args, **kwargs)
+
+    @property
+    def events(self):
+        return self.event_set
     
 
 

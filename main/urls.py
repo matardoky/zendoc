@@ -18,8 +18,14 @@ urlpatterns = [
         "event_list", 
         views.EventAPIView.as_view()
     ),
+
     re_path(
         '', 
         include(router.urls)
+    ), 
+    path(
+        "occurrences",
+        views.api_occurrences,
+        name="occurrence"
     )
 ]
