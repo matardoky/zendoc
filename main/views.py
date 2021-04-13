@@ -85,7 +85,7 @@ def api_occurrences(request):
 
     return JsonResponse(response_data, safe=False)
 
-@api_view(["GET"])
+
 def _api_occurrences(start, end, calendar_slug, timezone):
 
     if not start or not end:

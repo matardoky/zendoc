@@ -49,7 +49,7 @@ class Calendar(models.Model):
     updated_on= models.DateTimeField(auto_now=True)
     company= models.ForeignKey(Company, on_delete=models.CASCADE)
     uuid= models.UUIDField(db_index=True, default= uuid_lib.uuid4, editable=True)
-    slug = models.SlugField(blank=True)
+    slug= models.SlugField(blank=True)
 
     def __str__(self):
         return self.name

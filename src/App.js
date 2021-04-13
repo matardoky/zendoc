@@ -1,9 +1,9 @@
-import {Button} from "antd"
+import CustomTuiCalendar from "./components/Tui/CustomTuiCalendar";
 
-function App() {
+const App = () => {
   return (
-          <Button>Learn Python django</Button>
-  );
+    <CustomTuiCalendar/>
+  )
 }
 
 export default App;
