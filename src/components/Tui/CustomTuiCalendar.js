@@ -11,7 +11,7 @@ import moment from "moment";
   
 import "tui-calendar/dist/tui-calendar.css";
   
-// import "./styles.css";
+import "./styles.less";
   
 const CustomTuiCalendar = forwardRef(
     (
