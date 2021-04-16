@@ -338,11 +338,3 @@ class Occurrence(models.Model):
        if not self.title and self.event_id:
            self.title = self.event.title
 
-
-    class EventSerializer(serializers.ModelSerializer):
-        class Meta: 
-            model: Event
-            fields = ('__all__')
-
-    class OccurrenceSerializer(serializers.ModelSerializer):
-        pass

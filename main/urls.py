@@ -7,16 +7,18 @@ router = DefaultRouter()
 
 router.register("event", views.EventViewSet)
 router.register("calendar", views.CalendarViewSet)
+router.register("motifs", views.MotifViewSet)
 
 urlpatterns = [
     path(
         route="company",
         view= views.CompanyListView.as_view(), 
-        name= "company_list"
+        name= "company"
     ), 
     path(
-        "event_list", 
-        views.EventAPIView.as_view()
+        route="events", 
+        view = views.EventAPIView.as_view(),
+        name="events_list"
     ),
 
     re_path(

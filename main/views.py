@@ -10,7 +10,9 @@ from django.http import (
 
 from rest_framework.generics import (
     ListCreateAPIView,
+    ListAPIView,
     RetrieveUpdateDestroyAPIView,
+    RetrieveAPIView
 )
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
@@ -22,13 +24,14 @@ from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_RE
 from main.serializers import CompanySerializer, RuleSerializer
 from main.models.authenticate import Company, User
 from main.models.rules import Rule
-from main.models.calendars import Calendar
+from main.models.calendars import Calendar, Motif
 from main.models.events import Event,Occurrence
 
-from main.filters import IsUserFilterBackend
+from main.filters import IsUserFilterBackend, CompanyFilterBackend
 
 from main.serializers import (
-    CalendarSerializer, 
+    CalendarSerializer, MotifSerialiazer,
+    SpanEvent,
     EventSerializer,
     EventListSerializer
 )
@@ -51,11 +54,26 @@ class RuleView(ListCreateAPIView):
     queryset = Rule.objects.all()
     serializer_class = RuleSerializer
 
+class MotifViewSet(viewsets.ModelViewSet):
+    queryset = Motif.objects.all()
+    serializer_class = MotifSerialiazer
+    permission_classes = (IsAuthenticated, )
+    filter_backends = (CompanyFilterBackend,)
+
+    def perform_create(self, serializer):
+        serializer.save(company= self.request.user.company)
+
 
 class CalendarViewSet(UserMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
+
+class EventAPIView(ListAPIView):
+    queryset = Event.objects.all()
+    serializer_class = SpanEvent
+    permission_classes = (IsAuthenticated,)
+    lookup_field = "uuid"
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -63,13 +81,13 @@ class EventViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 
 
-class EventAPIView(APIView):
+""" class EventAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         queryset = Event.objects.all()
         serializer = EventListSerializer(queryset, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
+        return Response(serializer.data, status=HTTP_200_OK) """
 
 @api_view(["GET"])
 def api_occurrences(request):

@@ -5,7 +5,11 @@ from main.models.authenticate import Company, User
 from rest_framework import serializers
 
 class Address(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address1 = models.CharField(max_length=50)
+    address2 = models.CharField(max_length=50, blank=True)
+    zip_code = models.CharField(max_length=12)
+    city = models.CharField(max_length=50)
     uuid= models.UUIDField(db_index=True, editable=False, default= uuid_lib.uuid4)
 
 class Speciality(models.Model):
@@ -15,7 +19,7 @@ class Speciality(models.Model):
         return self.name
 
 class Base(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     name = models.CharField(max_length=150)
     uuid= models.UUIDField(db_index=True, editable=False, default= uuid_lib.uuid4)
 
@@ -29,15 +33,15 @@ class Motif(models.Model):
         FOLLOWED="FOLLOWED", "PATIENT SUIVI",
         ALL="ALL", "TOUTES GATEGORIES"
 
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    name= models.CharField(max_length=150)
-    duration= models.TimeField()
-    duration_max= models.TimeField()
-    duration_min= models.TimeField()
-    reservable= models.BooleanField(default=True)
-    type= models.CharField(max_length=50, choices=Type.choices, default=Type.ALL)
-    color= models.CharField(max_length=50, blank=True, null=True)
-    uuid= models.UUIDField(db_index=True, editable=False, default= uuid_lib.uuid4)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=150)
+    duration = models.TimeField()
+    duration_max = models.TimeField()
+    duration_min = models.TimeField()
+    reservable = models.BooleanField(default=True)
+    type = models.CharField(max_length=50, choices=Type.choices, default=Type.ALL)
+    color = models.CharField(max_length=50, blank=True, null=True)
+    uuid = models.UUIDField(db_index=True, editable=False, default= uuid_lib.uuid4)
 
     def __str__(self):
         return self.name

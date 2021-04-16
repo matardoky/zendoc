@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from main.models.authenticate import User, Company
 from main.models.rules import Rule
-from main.models.calendars import Calendar
+from main.models.calendars import Calendar, Motif
 from main.models.events import Event
 
 
@@ -55,7 +55,12 @@ class CustomRegisterSerializer(RegisterSerializer):
         adapter.save_user(request, user, self)
         return user
     
-        
+
+class MotifSerialiazer(serializers.HyperlinkedModelSerializer):
+    class Meta: 
+        model = Motif
+        fields = ("url", "uuid", "name", "duration", "duration_max", "duration_min", "reservable", "type", "color")
+        read_only_fields = ("uuid",)
 class RuleSerializer(serializers.ModelSerializer):
 
     uuid = serializers.ReadOnlyField()
@@ -64,19 +69,38 @@ class RuleSerializer(serializers.ModelSerializer):
         fields = ["uuid", "frequency", "params"]
 
 
-class CalendarSerializer(serializers.ModelSerializer):
+class CalendarSerializer(serializers.HyperlinkedModelSerializer):
     company = StringSerializer()
     class Meta:
         model = Calendar
-        fields = ("uuid","name", "slug", "created_on", "updated_on", "company" )
+        fields = ("url","uuid","name", "slug", "created_on", "updated_on", "company" )
         read_only_fields =("uuid", "slug", "created_on", "updated_on", "company")
 
-class EventSerializer(serializers.ModelSerializer):
+
+class SpanEvent(serializers.HyperlinkedModelSerializer):
+    class Meta: 
+        model = Event
+        fields = ("url", "uuid","calendar", "start", "end","type")
+        read_only_fields = ("uuid", "type")
+
+
+    def to_representation(self, instance):
+    
+        return {
+            "uuid": instance.uuid,
+            "calendar": instance.calendar.uuid,
+            "start": instance.start,
+            "end": instance.end,
+            "type": instance.type
+        }
+        
+
+class EventSerializer(serializers.HyperlinkedModelSerializer):
    
     rule = RuleSerializer()
     class Meta:
         model = Event
-        fields = ("uuid","calendar", "start", "end", "rule", "end_recurring_period","type")
+        fields = ("url", "uuid","calendar", "start", "end", "rule", "end_recurring_period","type")
         read_only_fields = ("uuid", "type")
 
     def get_fields(self, *args, **kwargs):
