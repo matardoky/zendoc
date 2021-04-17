@@ -1,9 +1,15 @@
 import React from 'react'
-
 import { BrowserRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { BaseRouter } from './routes'
+import { chechAuthState } from './store/actions/auth'
 
 class App extends React.Component {
+
+    componentDidMount(){
+        this.props.onTryAutoSignup()
+    }
+    
     render(){
         return(
             <BrowserRouter>
@@ -13,7 +19,19 @@ class App extends React.Component {
     }
 }
 
-export default App
+const mapDispatchToProps = (dispatch) => {
+    return{
+        onTryAutoSignup: () => dispatch(chechAuthState())
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        isAuthenticated: state.auth.token !== null,
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 
 
