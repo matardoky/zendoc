@@ -33,7 +33,6 @@ from main.serializers import (
     CalendarSerializer, MotifSerialiazer,
     SpanEvent,
     EventSerializer,
-    EventListSerializer
 )
 
 

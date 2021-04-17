@@ -61,6 +61,7 @@ class MotifSerialiazer(serializers.HyperlinkedModelSerializer):
         model = Motif
         fields = ("url", "uuid", "name", "duration", "duration_max", "duration_min", "reservable", "type", "color")
         read_only_fields = ("uuid",)
+
 class RuleSerializer(serializers.ModelSerializer):
 
     uuid = serializers.ReadOnlyField()
@@ -127,11 +128,6 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
         return event
 
 
-
-class EventListSerializer(serializers.ModelSerializer):
-    class Meta: 
-        model= Event
-        fields =("__all__")
         
 
     
