@@ -1,16 +1,14 @@
 import React from 'react'
-import { Button } from "antd"
+
+import { BrowserRouter } from 'react-router-dom'
+import { BaseRouter } from './routes'
 
 class App extends React.Component {
     render(){
         return(
-            <>
-            <Button>
-                Bonjour
-            </Button>
-        
-            </>
-
+            <BrowserRouter>
+                <BaseRouter/>
+            </BrowserRouter>
         )
     }
 }

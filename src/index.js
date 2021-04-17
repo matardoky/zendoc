@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import 'antd/dist/antd.less'
-import './static/base.less'
 import reportWebVitals from './reportWebVitals';
 
 import { createStore, compose, applyMiddleware, combineReducers} from 'redux'
