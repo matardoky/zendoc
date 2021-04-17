@@ -8,7 +8,7 @@ class App extends React.Component {
             <Button>
                 Bonjour
             </Button>
-            <button>Bonjour</button>
+        
             </>
 
         )
