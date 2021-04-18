@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Redirect, Route} from 'react-router-dom'
-import { Login } from './components/Accounts/Login'
+import Login  from './components/Accounts/Login'
 
 
 const PrivateRoute = ({component: Component, ...rest}) => {

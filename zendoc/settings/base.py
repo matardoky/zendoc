@@ -141,7 +141,7 @@ OLD_PASSWORD_FIELD_ENABLED = True
 #RESTAUTH 
 REST_AUTH_SERIALIZERS = {
    'USER_DETAILS_SERIALIZER': 'main.serializers.UserSerializer',
-    #'TOKEN_SERIALIZER': 'users.serializers.TokenSerializer',
+   'TOKEN_SERIALIZER': 'main.serializers.TokenSerializer',
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {

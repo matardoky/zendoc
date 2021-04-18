@@ -18,7 +18,6 @@ const authSuccess= (state, action) => {
         first_name:action.user.first_name, 
         last_name:action.user.last_name,
         is_admin:action.user.is_admin,
-        expirationDate:action.user.expirationDate
 
     })
 }
@@ -36,7 +35,8 @@ const authLogout = (state, action) => {
         first_name:null, 
         last_name:null,
         is_admin:null,
-        expirationDate:null,
+        loading:false,
+        error:null
     })
 }
 

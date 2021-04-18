@@ -55,9 +55,9 @@ export const chechAuthState = () => {
 }
 
 export const authLogin = (email, password) => {
-    return dispatch => {
+    return async dispatch => {
         dispatch(authStart())
-        axios.post(authUrls.LOGIN, {
+        await axios.post(authUrls.LOGIN, {
             email,
             password
         })

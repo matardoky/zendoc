@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
@@ -27,7 +28,7 @@ class CompanySerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta: 
         model = User
-        fields = '__all__'
+        fields = ('__all__')
 
 class CustomRegisterSerializer(RegisterSerializer):
     is_admin = serializers.BooleanField()
@@ -55,6 +56,26 @@ class CustomRegisterSerializer(RegisterSerializer):
         adapter.save_user(request, user, self)
         return user
     
+class TokenSerializer(serializers.ModelSerializer):
+    user_type = serializers.SerializerMethodField()
+    class Meta:
+        model = Token
+        fields = ("user", "key", "user_type")
+    
+    def get_user_type(self, obj):
+        serializer_data = UserSerializer(obj.user).data
+
+        first_name = serializer_data.get("first_name")
+        last_name = serializer_data.get("last_name")
+        is_admin = serializer_data.get("is_admin")
+
+        return {
+            "first_name": first_name,
+            "last_name": last_name,
+            "is_admin": is_admin
+        }
+
+        
 
 class MotifSerialiazer(serializers.HyperlinkedModelSerializer):
     class Meta: 
