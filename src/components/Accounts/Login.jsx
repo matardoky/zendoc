@@ -1,6 +1,8 @@
 import React from 'react'
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, Spin, Typography } from 'antd';
+import {UserOutlined, LockOutlined} from  '@ant-design/icons'
 import { connect } from 'react-redux'
+import { Redirect, Link } from "react-router-dom"
 import { authLogin } from '../../store/actions/auth';
 
 import PropTypes from 'prop-types'
@@ -19,70 +21,83 @@ const tailLayout = {
     span: 16,
   },
 };
+const { Title, Paragraph } = Typography
 
 const Login = ({loading, isAuthenticated, error, onAuth}) => {
+
   const onFinish = (values) => {
-    console.log(values.email, values.password)
-    
-
     onAuth(values.email, values.password)
-
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
-  console.log(loading)
+  if(isAuthenticated){
+    return <Redirect to=""/>
+  }
   return (
-    
-    <Form
-      {...layout}
-      name="basic"
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-    >
-      <p>{error}</p>
-      <Form.Item
-        label="Email"
-        name="email"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your email!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+    <section id="session__new">
+    {
+      loading ? (
+        <Spin/>
+      ):(
+          <Form
+          name="session__new"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          >  
+            <Title level={2}>Identifiez-vous</Title>
+            <Paragraph>{error}</Paragraph>
 
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your password!',
-          },
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
+            <p>{error}</p>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your email!',
+                },
+              ]}
+            >
+              <Input prefix={<UserOutlined />} placeholder="Adresse e-mail"/>
+            </Form.Item>
+        
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input.Password prefix={<LockOutlined />}/>
+            </Form.Item>
+        
+            <Form.Item  name="remember" valuePropName="checked">
+              <Checkbox>Se souvenir de mon identifiant</Checkbox>
+            </Form.Item>
+        
+            <Form.Item >
+              <Button type="primary" htmlType="submit">
+                connectez-vous
+              </Button>
+            </Form.Item>
+            <Link to="password-reset"> mot de passe oublié ?</Link>
+          </Form>
+        )
+    }
+    </section>
 
-      <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
-
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
-  );
-};
+        
+      
+  )
+}
 
 const mapStateToProps = ({auth:{token, loading, error}}) => {
   return {
@@ -103,6 +118,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(Login);
 Login.propTypes = {
   onAuth:PropTypes.func,
   isAuthenticated:PropTypes.bool,
-  loading:PropTypes.bool
-
+  loading:PropTypes.bool,
+  error: PropTypes.string
 }

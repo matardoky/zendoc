@@ -1,6 +1,9 @@
 import React from 'react'
 import { Switch, Redirect, Route} from 'react-router-dom'
+import ConfirmPasswordReset from './components/Accounts/ConfirmPasswordReset';
 import Login  from './components/Accounts/Login'
+import PasswordChange from './components/Accounts/PasswordChange';
+import { PasswordReset } from './components/Accounts/PasswordReset';
 
 
 const PrivateRoute = ({component: Component, ...rest}) => {
@@ -27,7 +30,10 @@ export const BaseRouter = () => {
 
     return (
         <Switch>
-            <Route exact path="/login" component ={Login}/>
+            <Route exact path="/session/new" component ={Login}/>
+            <Route exact path="/password/new" component={PasswordReset}/>
+            <Route exact path="/confirm/password/new" component={ConfirmPasswordReset}/>
+            <Route exact path="/password/change/new" component={PasswordChange}/>
             
         </Switch>
     )

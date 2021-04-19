@@ -64,7 +64,6 @@ export const authLogin = (email, password) => {
         .then(res => {
             const user = {
                 token: res.data.key,
-                userId: res.data.user,
                 first_name:res.data.user_type.first_name,
                 last_name: res.data.user_type.last_name,
                 is_admin: res.data.user_type.is_admin,
