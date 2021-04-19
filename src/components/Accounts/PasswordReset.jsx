@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 
-import { Typography, Row, Col, Badge, Form, Input, Button} from "antd"
+import { Typography, Row, Col, Badge, Form, Input, Button, Alert} from "antd"
 import { authUrls } from '../../constants'
 const { Title, Paragraph } = Typography
 
 export const PasswordReset = () => {
-  const [notif, setNotif] = useState("")
+  const [alert, setAlert] = useState("")
   const [send, setSend] = useState(false)
   
   const reset = async (email) => {
@@ -15,7 +15,7 @@ export const PasswordReset = () => {
       })
       .then( async ({data}) => {
         setSend(true)
-        setNotif( await data.detail)
+        setAlert( await data.detail)
 
       })
       .catch(err => {
@@ -26,15 +26,16 @@ export const PasswordReset = () => {
   const onFinish = (values) => {
     reset(values.email)
   }
+  
     return(
         <section id="password__reset">
           <Title level={2}>Réinitialiser le mot de passe de votre compte bandoc</Title>
           {
             send ? (
-              <Paragraph>{notif}</Paragraph>
-            ):null
+              <Alert message={alert} type="success" showIcon/>
+            ): null
+
           }
-          <Paragraph>{send}</Paragraph>
           <Row gutter={[16,16]}>
             <Col span={1}>
               <Badge count={1}  style={{ backgroundColor: '#001529' }} />
@@ -80,9 +81,9 @@ export const PasswordReset = () => {
           >
             <Form.Item
             name="email"
-            rule = {[
+            rules = {[
               {
-                require:true,
+                required:true,
                 message:"Enter votre addresse e-mail de votre compte bandoc"
               }
             ]}
