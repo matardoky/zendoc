@@ -7,20 +7,6 @@ import { authLogin } from '../../store/actions/auth';
 
 import PropTypes from 'prop-types'
 
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-const tailLayout = {
-  wrapperCol: {
-    offset: 8,
-    span: 16,
-  },
-};
 const { Title, Paragraph } = Typography
 
 const Login = ({loading, isAuthenticated, error, onAuth}) => {
@@ -32,9 +18,9 @@ const Login = ({loading, isAuthenticated, error, onAuth}) => {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
-  if(isAuthenticated){
+  /* if(isAuthenticated){
     return <Redirect to=""/>
-  }
+  } */
   return (
     <section id="session__new">
     {

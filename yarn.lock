@@ -4607,6 +4607,11 @@
     "memory-fs" "^0.5.0"
     "tapable" "^1.0.0"
 
+"enquire@^0.0.2":
+  "integrity" "sha1-6SOJzYAiSXFwDk/IusgSnHW/hmE="
+  "resolved" "https://registry.npmjs.org/enquire/-/enquire-0.0.2.tgz"
+  "version" "0.0.2"
+
 "enquirer@^2.3.5":
   "integrity" "sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg=="
   "resolved" "https://registry.npmjs.org/enquirer/-/enquirer-2.3.6.tgz"

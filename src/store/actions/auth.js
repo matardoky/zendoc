@@ -61,12 +61,12 @@ export const authLogin = (email, password) => {
             email,
             password
         })
-        .then(res => {
+        .then( ({data:{key, user_type}}) => {
             const user = {
-                token: res.data.key,
-                first_name:res.data.user_type.first_name,
-                last_name: res.data.user_type.last_name,
-                is_admin: res.data.user_type.is_admin,
+                token: key,
+                first_name: user_type.first_name,
+                last_name: user_type.last_name,
+                is_admin: user_type.is_admin,
                 expirationDate: new Date(new Date().getTime()+3600*1000)
             }
             localStorage.setItem('user', JSON.stringify(user))
