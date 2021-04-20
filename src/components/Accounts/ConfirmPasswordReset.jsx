@@ -10,7 +10,6 @@ const { Title, Paragraph } = Typography
 export const ConfirmPasswordReset = () => {
     const[success, setSuccess] = useState(false)
     const[fail, setFail] = useState(false)
-
     const[alert, setAlert] = useState("")
 
     let history = useHistory()
@@ -27,16 +26,19 @@ export const ConfirmPasswordReset = () => {
       const data = Object.assign(password, {uid, token})
       await axios.post(authUrls.PASSWORD_RESET_CONFIRM, data
       )
-      .then(async res =>{
+      .then( ({data}) =>{
         setSuccess(true)
-        setAlert(await res.data)
-
+        setAlert(data.detail)
       })
-      .catch( async err =>{
+      .catch( ({response:{data}}) =>{
         setFail(true)
-        setAlert(await err.response.data.new_password2)
-        setAlert(await err.response.data.token)
+        if(data.new_password2){
+          setAlert(data.new_password2)
+        }
 
+        if(data.token){
+          setAlert(data.token)
+        }
       })
 
     }
