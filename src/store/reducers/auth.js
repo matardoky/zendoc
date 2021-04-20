@@ -2,7 +2,9 @@ import { authType } from "../actions/actionTypes"
 import { UpdateObject } from "./utils"
 
 let initialState = {
-
+    token:null,
+    error:null,
+    loading:false
 }
 
 const authStart = (state, action) => {
@@ -32,11 +34,6 @@ const authFail=(state, action) => {
 const authLogout = (state, action) => {
     return UpdateObject(state, {
         token:null,
-        first_name:null, 
-        last_name:null,
-        is_admin:null,
-        loading:false,
-        error:null
     })
 }
 

@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 const { Title, Paragraph } = Typography
 
 const Login = ({loading, isAuthenticated, error, onAuth}) => {
-
+  
   const onFinish = (values) => {
     onAuth(values.email, values.password)
   };
@@ -18,66 +18,66 @@ const Login = ({loading, isAuthenticated, error, onAuth}) => {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
-  /* if(isAuthenticated){
-    return <Redirect to=""/>
-  } */
+  
+  if(isAuthenticated){
+    return <Redirect to="/"/>
+  }
   return (
     <section id="session__new">
-    {
-      loading ? (
-        <Spin/>
-      ):(
-          <Form
-          name="session__new"
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          >  
-            <Title level={2}>Identifiez-vous</Title>
-            <Paragraph>{error}</Paragraph>
-
-            <p>{error}</p>
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your email!',
-                },
-              ]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="Adresse e-mail"/>
-            </Form.Item>
-        
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your password!',
-                },
-              ]}
-            >
-              <Input.Password prefix={<LockOutlined />}/>
-            </Form.Item>
-        
-            <Form.Item  name="remember" valuePropName="checked">
-              <Checkbox>Se souvenir de mon identifiant</Checkbox>
-            </Form.Item>
-        
-            <Form.Item >
-              <Button type="primary" htmlType="submit">
-                connectez-vous
-              </Button>
-            </Form.Item>
-            <Link to="password-reset"> mot de passe oublié ?</Link>
-          </Form>
-        )
-    }
+      {
+        loading ? (
+          <Spin/>
+        ):(
+            <Form
+            name="session__new"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            >  
+              <Title level={2}>Identifiez-vous</Title>
+              <Paragraph type="danger">{error}</Paragraph>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your email!',
+                  },
+                ]}
+              >
+                <Input prefix={<UserOutlined />} placeholder="Adresse e-mail"/>
+              </Form.Item>
+          
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your password!',
+                  },
+                ]}
+              >
+                <Input.Password prefix={<LockOutlined />}/>
+              </Form.Item>
+          
+              <Form.Item  name="remember" valuePropName="checked">
+                <Checkbox>Se souvenir de mon identifiant</Checkbox>
+              </Form.Item>
+          
+              <Form.Item >
+                <Button type="primary" htmlType="submit">
+                  connectez-vous
+                </Button>
+              </Form.Item>
+              <Link to="password-reset"> mot de passe oublié ?</Link>
+            </Form>
+          )
+      }
+    
     </section>
 
         
@@ -87,7 +87,7 @@ const Login = ({loading, isAuthenticated, error, onAuth}) => {
 
 const mapStateToProps = ({auth:{token, loading, error}}) => {
   return {
-    isAuthenticated: token !==null,
+    isAuthenticated: token !== null,
     loading: loading,
     error: error
   }

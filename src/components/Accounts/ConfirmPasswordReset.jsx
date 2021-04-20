@@ -15,7 +15,7 @@ export const ConfirmPasswordReset = () => {
     let history = useHistory()
     let params = useParams()
 
-    const confirm = async (new_password1, new_password2) => {
+    const confirm = (new_password1, new_password2) => {
       const {uid, token} = params
       
       const password = {
@@ -24,7 +24,7 @@ export const ConfirmPasswordReset = () => {
       }
 
       const data = Object.assign(password, {uid, token})
-      await axios.post(authUrls.PASSWORD_RESET_CONFIRM, data
+      axios.post(authUrls.PASSWORD_RESET_CONFIRM, data
       )
       .then( ({data}) =>{
         setSuccess(true)
@@ -42,8 +42,8 @@ export const ConfirmPasswordReset = () => {
       })
 
     }
-    const onFinish = (values) => {
-      confirm(values.new_password1, values.new_password2)
+    const onFinish = ({new_password1, new_password2}) => {
+      confirm(new_password1, new_password2)
     }
     
     return (
