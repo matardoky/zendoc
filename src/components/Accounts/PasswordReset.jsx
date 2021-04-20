@@ -7,14 +7,14 @@ const { Title, Paragraph } = Typography
 
 export const PasswordReset = () => {
   const [alert, setAlert] = useState("")
-  const [send, setSend] = useState(false)
+  const [submit, setSubmit] = useState(false)
   
   const reset = async (email) => {
       await axios.post(authUrls.PASSWORD_RESET, {
         email
       })
       .then( async ({data}) => {
-        setSend(true)
+        setSubmit(true)
         setAlert( await data.detail)
 
       })
@@ -31,7 +31,7 @@ export const PasswordReset = () => {
         <section id="password__reset">
           <Title level={2}>Réinitialiser le mot de passe de votre compte bandoc</Title>
           {
-            send ? (
+            submit ? (
               <Alert message={alert} type="success" showIcon/>
             ): null
 

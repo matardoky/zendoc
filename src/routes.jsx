@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Redirect, Route} from 'react-router-dom'
-import ConfirmPasswordReset from './components/Accounts/ConfirmPasswordReset';
+import {ConfirmPasswordReset} from './components/Accounts/ConfirmPasswordReset';
 import Login  from './components/Accounts/Login'
 import PasswordChange from './components/Accounts/PasswordChange';
 import { PasswordReset } from './components/Accounts/PasswordReset';
@@ -32,7 +32,7 @@ export const BaseRouter = () => {
         <Switch>
             <Route exact path="/session/new" component ={Login}/>
             <Route exact path="/password/new" component={PasswordReset}/>
-            <Route exact path="/confirm/password/new" component={ConfirmPasswordReset}/>
+            <Route exact path="/rest-auth/password/reset/confirm/:uid/:token" component={ConfirmPasswordReset}/>
             <Route exact path="/password/change/new" component={PasswordChange}/>
             
         </Switch>
