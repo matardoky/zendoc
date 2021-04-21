@@ -20,7 +20,7 @@ const Login = ({loading, isAuthenticated, error, onAuth}) => {
   };
   
   if(isAuthenticated){
-    return <Redirect to="/"/>
+    return <Redirect to="/session/home"/>
   }
   return (
     <section id="session__new">
