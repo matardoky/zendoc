@@ -5,6 +5,7 @@ import Login  from './components/Accounts/Login'
 import PasswordChange from './components/Accounts/PasswordChange';
 import { PasswordReset } from './components/Accounts/PasswordReset';
 import BaseLayout from './components/Home/BaseLayout';
+import { Calendar } from './components/Home/Calendar';
 
 
 const PrivateRoute = ({component: Component, ...rest}) => {
@@ -18,7 +19,7 @@ const PrivateRoute = ({component: Component, ...rest}) => {
       ):(
           <Redirect
           to={{
-              pathname:"/",
+              pathname:"/session/new",
               state: {from: props.location}
           }}
           />
@@ -35,8 +36,13 @@ export const BaseRouter = () => {
       <Route exact path="/password/new" component={PasswordReset}/>
       <Route exact path="/rest-auth/password/reset/confirm/:uid/:token" component={ConfirmPasswordReset}/>
       <Route exact path="/password/change/new" component={PasswordChange}/>
-      <PrivateRoute exact path="/session/home" component={BaseLayout}/>
-      
+      <PrivateRoute>
+        <BaseLayout>
+          <Switch>
+            <PrivateRoute exact path="/session/home" component={Calendar}/>
+          </Switch>
+        </BaseLayout>
+      </PrivateRoute>
     </Switch>
       
   )
