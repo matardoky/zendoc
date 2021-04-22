@@ -73,7 +73,7 @@ const Login = ({loading, isAuthenticated, error, onAuth}) => {
                   connectez-vous
                 </Button>
               </Form.Item>
-              <Link to="password-reset"> mot de passe oublié ?</Link>
+              <Link to="/password/new"> mot de passe oublié ?</Link>
             </Form>
           )
       }

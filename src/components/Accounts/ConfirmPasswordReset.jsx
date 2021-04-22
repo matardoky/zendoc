@@ -51,77 +51,85 @@ export const ConfirmPasswordReset = () => {
     
     return (
       <section id="confirm__password">
-        <Title level={4}>Créer votre nouveau mot de passe</Title>
         {
           alert.length ? (
             <Alert message={alert} type={type} showIcon />
-          ):null
-        }
-        
-        <Paragraph>Choisissez un mot de passe sécurisé et ne le réutilisez pas pour d'autres comptes.</Paragraph>
-        <Form
-        hideRequiredMark
-        colon={false}
-        onFinish={onFinish}
-        >
-          <Form.Item
-          name="new_password1"
-          label="Nouveau mot de passe"
-          style={{
-            display:"block"
-          }}
-          rules ={[
-            {
-              required:true,
-              message:"Entrer votre nouveau mot de passe"
-            }
-          ]}
-          extra={`Niveau de sécurité du mot de passe: Utilisez au moins 8 caractères. Ne choisissez pas un mot de passe que vous utilisez déjà sur un autre site, ni un mot de passe trop évident, tel que le nom de votre animal de compagnie. `}
-          >
-            <Input.Password/>
+            ):null
+          }
 
-          </Form.Item>
-          <Form.Item
-          name="new_password2"
-          label="Confirmation du nouveau mot de passe"
-          style={{
-            display:"block"
-          }}
-          rules={[
-            {
-              required:true, 
-              message:"Confirmer votre mot de passe"
-            },
-            ({getFieldValue}) => ({
-              validator(rules, value){
-                  if(!value || getFieldValue('new_password1')===value){
-                    return Promise.resolve()
+        {
+          type==="success" ? (
+            <Button onClick={()=> history.push("/session/new")}>connectez-vous</Button>
+          ):(
+            <>
+              <Title level={4}>Créer votre nouveau mot de passe</Title>
+              <Paragraph>Choisissez un mot de passe sécurisé et ne le réutilisez pas pour d'autres comptes.</Paragraph>
+              <Form
+              hideRequiredMark
+              colon={false}
+              onFinish={onFinish}
+              >
+                <Form.Item
+                name="new_password1"
+                label="Nouveau mot de passe"
+                style={{
+                  display:"block"
+                }}
+                rules ={[
+                  {
+                    required:true,
+                    message:"Entrer votre nouveau mot de passe"
                   }
-                  return Promise.reject("les deux mots de passe ne sont pas identiques")
-              }
-            })
-          ]}
-          dependencies={[
-            "new_password1"
-          ]}
-          
-          >
-            <Input.Password/>
-
-          </Form.Item>
-          <Form.Item>
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Button htmlType="submit" block > Valider </Button>
-              </Col>
-              <Col span={12}>
-                <Button htmlType="submit" block onClick={()=> history.push("/")}>Annuler </Button>
-              </Col>
-            </Row>
-
-          </Form.Item>
-
-        </Form>
+                ]}
+                extra={`Niveau de sécurité du mot de passe: Utilisez au moins 8 caractères. Ne choisissez pas un mot de passe que vous utilisez déjà sur un autre site, ni un mot de passe trop évident, tel que le nom de votre animal de compagnie. `}
+                >
+                  <Input.Password/>
+      
+                </Form.Item>
+                <Form.Item
+                name="new_password2"
+                label="Confirmation du nouveau mot de passe"
+                style={{
+                  display:"block"
+                }}
+                rules={[
+                  {
+                    required:true, 
+                    message:"Confirmer votre mot de passe"
+                  },
+                  ({getFieldValue}) => ({
+                    validator(rules, value){
+                        if(!value || getFieldValue('new_password1')===value){
+                          return Promise.resolve()
+                        }
+                        return Promise.reject("les deux mots de passe ne sont pas identiques")
+                    }
+                  })
+                ]}
+                dependencies={[
+                  "new_password1"
+                ]}
+                
+                >
+                  <Input.Password/>
+      
+                </Form.Item>
+                <Form.Item>
+                  <Row gutter={[16, 16]}>
+                    <Col span={12}>
+                      <Button htmlType="submit" block > Valider </Button>
+                    </Col>
+                    <Col span={12}>
+                      <Button htmlType="submit" block onClick={()=> history.push("/")}>Annuler </Button>
+                    </Col>
+                  </Row>
+      
+                </Form.Item>
+      
+              </Form>
+            </>
+          )
+        }
       </section>
     )
 }
