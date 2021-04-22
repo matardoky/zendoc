@@ -6,15 +6,14 @@ import { authUrls } from '../../constants'
 const { Title, Paragraph } = Typography
 
 export const PasswordReset = () => {
-  const [alert, setAlert] = useState("")
-  const [submit, setSubmit] = useState(false)
+  const [alert, setAlert] = useState({})
   
   const reset = async (email) => {
       await axios.post(authUrls.PASSWORD_RESET, {
         email
       })
       .then( async ({data}) => {
-        setSubmit(true)
+        console.log({data})
         setAlert( await data.detail)
 
       })
@@ -31,7 +30,7 @@ export const PasswordReset = () => {
         <section id="password__reset">
           <Title level={2}>Réinitialiser le mot de passe de votre compte bandoc</Title>
           {
-            submit ? (
+            alert.length ? (
               <Alert message={alert} type="success" showIcon/>
             ): null
 

@@ -8,9 +8,10 @@ import { authUrls } from '../../constants'
 const { Title, Paragraph } = Typography
 
 export const ConfirmPasswordReset = () => {
-    const[success, setSuccess] = useState(false)
-    const[fail, setFail] = useState(false)
-    const[alert, setAlert] = useState("")
+    
+    const[alert, setAlert] = useState({})
+    const [type, setType] = useState("error")
+    
 
     let history = useHistory()
     let params = useParams()
@@ -27,11 +28,13 @@ export const ConfirmPasswordReset = () => {
       axios.post(authUrls.PASSWORD_RESET_CONFIRM, data
       )
       .then( ({data}) =>{
-        setSuccess(true)
         setAlert(data.detail)
+        const style = "success"
+        setType(style)
+        
       })
       .catch( ({response:{data}}) =>{
-        setFail(true)
+        
         if(data.new_password2){
           setAlert(data.new_password2)
         }
@@ -50,16 +53,11 @@ export const ConfirmPasswordReset = () => {
       <section id="confirm__password">
         <Title level={4}>Créer votre nouveau mot de passe</Title>
         {
-          success ? (
-            <Alert message={alert} type="success" showIcon/>
- 
+          alert.length ? (
+            <Alert message={alert} type={type} showIcon />
           ):null
         }
-        {
-          fail ? (
-            <Alert message={alert} type="error" showIcon/>
-          ):null
-        }
+        
         <Paragraph>Choisissez un mot de passe sécurisé et ne le réutilisez pas pour d'autres comptes.</Paragraph>
         <Form
         hideRequiredMark
