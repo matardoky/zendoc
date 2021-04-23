@@ -11,7 +11,7 @@ import moment from "moment";
   
 import "tui-calendar/dist/tui-calendar.css";
   
-import "./styles.less";
+import "./styles.less"; //par rapport au sidebar
   
 const CustomTuiCalendar = forwardRef(
     (
@@ -90,7 +90,7 @@ const CustomTuiCalendar = forwardRef(
             goingDuration: function (schedule) {
               return (
                 '<span class="calendar-icon ic-travel-time"></span>' +
-                schedule.goingDuration +
+                schedule.goingDuration + 
                 "min."
               );
             },

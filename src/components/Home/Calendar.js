@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import CustomTuiModal from "../Tui/CustomModal";
 import CustomTuiCalendar from "../Tui/CustomTuiCalendar";
 
-import "bootstrap/dist/css/bootstrap.css";
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 60));
@@ -277,6 +276,7 @@ export default function Calendar() {
           showMenu: true,
           taskView: false,
           scheduleView: ['time'],
+          defaultTimeDuration : 30,
           template:{
             timegridDisplayPrimayTime: function (time) {
                 return (time.hour < 10 ? '0' : '') + time.hour + ':' + time.minutes + '0';
