@@ -16,7 +16,7 @@ import "./styles.less";
 const CustomTuiCalendar = forwardRef(
     (
       {
-        height = "800px",
+        height = "100vh",
         defaultView = "week",
         calendars = [],
         schedules = [],

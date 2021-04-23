@@ -5,7 +5,7 @@ import Login  from './components/Accounts/Login'
 import PasswordChange from './components/Accounts/PasswordChange';
 import { PasswordReset } from './components/Accounts/PasswordReset';
 import BaseLayout from './components/Home/BaseLayout';
-import { Calendar } from './components/Home/Calendar';
+import  Calendar  from './components/Home/Calendar';
 
 
 const PrivateRoute = ({component: Component, ...rest}) => {
