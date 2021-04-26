@@ -52,7 +52,8 @@ const CustomTuiCalendar = forwardRef(
         },
         createSchedule,
         updateSchedule,
-        deleteSchedule
+        deleteSchedule,
+        setRenderRangeText
       }));
   
       useEffect(() => {
@@ -428,7 +429,7 @@ const CustomTuiCalendar = forwardRef(
   
         var html = [];
         if (viewName === "day") {
-          html.push(currentCalendarDate("YYYY.MM.DD"));
+          html.push(currentCalendarDate("DD.MM.YYYY"));
         } else if (
           viewName === "month" &&
           (!options.month.visibleWeeksCount ||
@@ -574,6 +575,8 @@ const CustomTuiCalendar = forwardRef(
           cloneFilterSchedules.filter((item) => item.id !== schedule.id)
         );
       }
+
+      console.log(tuiRef.current)
   
       return (
         <div>

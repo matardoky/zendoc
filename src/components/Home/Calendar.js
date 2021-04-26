@@ -150,6 +150,8 @@ export default function Calendar() {
     setEvent(null);
   };
 
+  console.log(childRef.current)
+
   function onBeforeCreateSchedule(event) {
     // console.log('onBeforeCreateSchedule', event)
     event.guide.clearGuideElement();
@@ -265,6 +267,7 @@ export default function Calendar() {
     ...colors.find((element2) => element2.id === element.id),
     ...element
   }));
+  
 
   return (
     <div>
