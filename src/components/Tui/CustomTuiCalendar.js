@@ -53,7 +53,7 @@ const CustomTuiCalendar = forwardRef(
         createSchedule,
         updateSchedule,
         deleteSchedule,
-        setRenderRangeText
+        
       }));
   
       useEffect(() => {
@@ -343,6 +343,8 @@ const CustomTuiCalendar = forwardRef(
           calendars,
           ...rest
         });
+       /*  console.log("customTui")
+        console.log(calendarInstRef.current) */
         setRenderRangeText();
         // render schedules
         calendarInstRef.current.clear();
@@ -407,6 +409,7 @@ const CustomTuiCalendar = forwardRef(
         return () => {
           calendarInstRef.current.destroy();
         };
+
       }, [tuiRef, schedules]);
   
       useLayoutEffect(() => {
@@ -422,6 +425,7 @@ const CustomTuiCalendar = forwardRef(
   
         return currentDate.format(format);
       }
+
   
       function setRenderRangeText() {
         var options = calendarInstRef.current.getOptions();
@@ -435,17 +439,17 @@ const CustomTuiCalendar = forwardRef(
           (!options.month.visibleWeeksCount ||
             options.month.visibleWeeksCount > 4)
         ) {
-          html.push(currentCalendarDate("YYYY.MM"));
+          html.push(currentCalendarDate("MM.YYYY"));
         } else {
           html.push(
             moment(calendarInstRef.current.getDateRangeStart().getTime()).format(
-              "YYYY.MM.DD"
+              "DD.MM.YYYY"
             )
           );
-          html.push(" ~ ");
+          html.push(" - ");
           html.push(
             moment(calendarInstRef.current.getDateRangeEnd().getTime()).format(
-              " MM.DD"
+              "DD.MM"
             )
           );
         }
@@ -576,7 +580,6 @@ const CustomTuiCalendar = forwardRef(
         );
       }
 
-      console.log(tuiRef.current)
   
       return (
         <div>

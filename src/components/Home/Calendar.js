@@ -1,6 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import CustomTuiModal from "../Tui/CustomModal";
 import CustomTuiCalendar from "../Tui/CustomTuiCalendar";
+
+import BaseCalendar from 'tui-calendar'
+
+const cal =new BaseCalendar()
+console.log(cal)
 
 
 const start = new Date();
@@ -150,6 +155,7 @@ export default function Calendar() {
     setEvent(null);
   };
 
+ 
   console.log(childRef.current)
 
   function onBeforeCreateSchedule(event) {
@@ -158,6 +164,8 @@ export default function Calendar() {
     setModal(true);
     setEvent(event);
   }
+
+  
 
   function handleCreateSchedule(newEvent) {
     // call api
