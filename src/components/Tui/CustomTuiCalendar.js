@@ -8,10 +8,17 @@ import React, {
   } from "react";
 import TuiCalendar from "tui-calendar";
 import moment from "moment";
+import dayjs from 'dayjs'
+
+import 'dayjs/locale/fr'
+
+
   
 import "tui-calendar/dist/tui-calendar.css";
   
 import "./styles.less"; //par rapport au sidebar
+
+dayjs.locale('fr')
   
 const CustomTuiCalendar = forwardRef(
     (
@@ -417,7 +424,7 @@ const CustomTuiCalendar = forwardRef(
       });
   
       function currentCalendarDate(format) {
-        var currentDate = moment([
+        var currentDate = dayjs([
           calendarInstRef.current.getDate().getFullYear(),
           calendarInstRef.current.getDate().getMonth(),
           calendarInstRef.current.getDate().getDate()
@@ -433,7 +440,7 @@ const CustomTuiCalendar = forwardRef(
   
         var html = [];
         if (viewName === "day") {
-          html.push(currentCalendarDate("DD.MM.YYYY"));
+          html.push(currentCalendarDate("DD-MMMM-YYYY"));
         } else if (
           viewName === "month" &&
           (!options.month.visibleWeeksCount ||
@@ -442,14 +449,14 @@ const CustomTuiCalendar = forwardRef(
           html.push(currentCalendarDate("MM.YYYY"));
         } else {
           html.push(
-            moment(calendarInstRef.current.getDateRangeStart().getTime()).format(
-              "DD.MM.YYYY"
+            dayjs(calendarInstRef.current.getDateRangeStart().getTime()).format(
+              "MMMM"
             )
           );
           html.push(" - ");
           html.push(
-            moment(calendarInstRef.current.getDateRangeEnd().getTime()).format(
-              "DD.MM"
+            dayjs(calendarInstRef.current.getDateRangeEnd().getTime()).format(
+              "MMMM YYYY"
             )
           );
         }

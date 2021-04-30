@@ -4,8 +4,8 @@ import CustomTuiCalendar from "../Tui/CustomTuiCalendar";
 
 import BaseCalendar from 'tui-calendar'
 
-const cal =new BaseCalendar()
-console.log(cal)
+/* const cal =new BaseCalendar()
+console.log(cal) */
 
 
 const start = new Date();
