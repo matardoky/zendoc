@@ -57,7 +57,7 @@ const CustomTuiCalendar = forwardRef(
         schedules, 
         ...rest
       })
-
+      setRenderRangeText()
       // render schedules
       calendarInstRef.current.clear()
       calendarInstRef.current.createSchedules(filterSchedules, true)
@@ -121,8 +121,36 @@ const CustomTuiCalendar = forwardRef(
       return currentDate.format(format)
     }
 
-    const setRenderRangeText = () => {
+    function setRenderRangeText(){
+      const viewName = calendarInstRef.current.getViewName()
+      const calDate = calendarInstRef.current.getDate()
+      const customMonth = dayjs(calDate).format('MMMM').charAt(0).toUpperCase() + dayjs(calDate).format('MMMM').slice(1)
+      const dateRangeText = []
 
+      switch(viewName){
+        case "day":
+          dateRangeText.push(currentCalendarDate("DD MMMM YYYY"))
+          break;
+        case "month":
+          dateRangeText.push(customMonth)
+          dateRangeText.push(currentCalendarDate("YYYY"))
+          break;
+        default:
+          const rangeStart = calendarInstRef.current.getDateRangeStart().getTime()
+          const rangeEnd = calendarInstRef.current.getDateRangeEnd().getTime()
+          if( dayjs(rangeStart).format("MMMM")=== dayjs(rangeEnd).format("MMMM")) {
+            dateRangeText.push(customMonth)
+            dateRangeText.push(currentCalendarDate("YYYY"))
+          } else {
+            dateRangeText.push(customMonth)
+            dateRangeText.push("-")
+            dateRangeText.push(dayjs(rangeEnd.format("MMM YYYY")))
+
+          }
+
+      }
+
+      setRenderRange(dateRangeText.join(" "))
     }
 
 
