@@ -90,10 +90,10 @@ class EventViewSet(viewsets.ModelViewSet):
 
 @api_view(["GET"])
 def api_occurrences(request):
-    start = request.GET.get("start")
-    end = request.GET.get("end")
-    calendar_slug = request.GET.get("calendar_slug")
-    timezone = request.GET.get("timezone")
+    start = request.query_params.get("start")
+    end = request.query_params.get("end")
+    calendar_slug = request.query_params.get("calendar_slug")
+    timezone = request.query_params.get("timezone")
 
     try:
         response_data = _api_occurrences(start, end, calendar_slug, timezone)

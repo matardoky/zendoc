@@ -127,28 +127,28 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
 ]
 #allauth
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# ]
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_USER_EMAIL_FIELD = 'email'
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_USER_EMAIL_FIELD = 'email'
 
-OLD_PASSWORD_FIELD_ENABLED = True 
+# OLD_PASSWORD_FIELD_ENABLED = True 
 
 #RESTAUTH 
-REST_AUTH_SERIALIZERS = {
-   'USER_DETAILS_SERIALIZER': 'main.serializers.UserSerializer',
-   'TOKEN_SERIALIZER': 'main.serializers.TokenSerializer',
-}
+# REST_AUTH_SERIALIZERS = {
+#    'USER_DETAILS_SERIALIZER': 'main.serializers.UserSerializer',
+#    'TOKEN_SERIALIZER': 'main.serializers.TokenSerializer',
+# }
 
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER' : 'main.serializers.CustomRegisterSerializer'
-}
+# REST_AUTH_REGISTER_SERIALIZERS = {
+#     'REGISTER_SERIALIZER' : 'main.serializers.CustomRegisterSerializer'
+# }
 
 #RESTFRAMEWORK
 REST_FRAMEWORK = {
@@ -166,4 +166,4 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
-AUTH_USER_MODEL = "main.User"
+AUTH_USER_MODEL = "authentication.User"

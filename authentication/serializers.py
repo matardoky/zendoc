@@ -25,6 +25,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ["email", "username", "password", "token"]
 
     def validate(self, data):
+        
         if not re.match(r"^(?=.*[A-Z])(?=.*[a-z]).*", password):
             raise serializers.ValidationError(
                 "A password must contains atleast one small letter and one capital letter"
