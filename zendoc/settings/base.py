@@ -23,6 +23,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 
     'main.apps.MainConfig',
+    'authentication.apps.AuthenticationConfig',
+    'scheduler.apps.SchedulerConfig',
     'django_filters',
     'django_extensions',
 ]

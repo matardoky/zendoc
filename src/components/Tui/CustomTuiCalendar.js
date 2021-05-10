@@ -1,11 +1,11 @@
 import React, {
-    useRef,
-    useLayoutEffect,
-    useEffect,
-    useState,
-    forwardRef,
-    useImperativeHandle
-  } from "react";
+  useRef,
+  useLayoutEffect,
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle
+} from "react";
 import TuiCalendar from "tui-calendar";
 import moment from "moment";
 import dayjs from 'dayjs'
@@ -434,7 +434,7 @@ const CustomTuiCalendar = forwardRef(
       }
 
   
-      function setRenderRangeText() {
+      /* function setRenderRangeText() {
         var options = calendarInstRef.current.getOptions();
         var viewName = calendarInstRef.current.getViewName();
   
@@ -461,6 +461,40 @@ const CustomTuiCalendar = forwardRef(
           );
         }
         setRenderRange(html.join(""));
+      } */
+
+      function setRenderRangeText(){
+        const viewName = calendarInstRef.current.getViewName()
+        const calDate = calendarInstRef.current.getDate()
+        const customMonth = dayjs(calDate).format('MMMM').charAt(0).toUpperCase() + dayjs(calDate).format('MMMM').slice(1)
+        const dateRangeText = []
+  
+        switch(viewName){
+          case "day":
+            dateRangeText.push(currentCalendarDate("DD MMMM YYYY"))
+            break;
+          case "month":
+            dateRangeText.push(customMonth)
+            dateRangeText.push(currentCalendarDate("YYYY"))
+            break;
+          default:
+            const rangeStart = calendarInstRef.current.getDateRangeStart().getTime()
+            const rangeEnd = calendarInstRef.current.getDateRangeEnd().getTime()
+            const rangeStartMonth = dayjs(rangeStart).format('MMMM').charAt(0).toUpperCase() + dayjs(rangeStart).format('MMMM').slice(1)
+
+            if( dayjs(rangeStart).format("MMMM")=== dayjs(rangeEnd).format("MMMM")) {
+              dateRangeText.push(customMonth)
+              dateRangeText.push(currentCalendarDate("YYYY"))
+            } else {
+              dateRangeText.push(rangeStartMonth)
+              dateRangeText.push("-")
+              dateRangeText.push(dayjs(rangeEnd).format("MMM YYYY"))
+  
+            }
+  
+        }
+  
+        setRenderRange(dateRangeText.join(" "))
       }
   
       function _getTimeTemplate(schedule, isAllDay) {
@@ -730,6 +764,7 @@ const CustomTuiCalendar = forwardRef(
                           calendarInstRef.current.changeView("month", true);
                           setType("Month");
                           setOpen(false);
+                          setRenderRangeText()
                         }}
                         className="dropdown-menu-title"
                         role="menuitem"
