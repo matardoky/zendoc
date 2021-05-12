@@ -8,7 +8,7 @@ from .models import User
 class JWTAuthentication(BaseAuthentication): 
     authentication_header_prefix = "Token"
 
-    def authenticate(self, resquest): 
+    def authenticate(self, request): 
 
         request.user = None
         auth_header = get_authorization_header(request).split()
@@ -20,7 +20,7 @@ class JWTAuthentication(BaseAuthentication):
         prefix = auth_header[0].decode('utf-8')
         token = auth_header[1].decode('utf-8')
 
-        if prefix.lower() ! == auth_header_prefix:
+        if prefix.lower() != auth_header_prefix:
             return None
 
         return self._authenication_credentials(request, token)

@@ -1,8 +1,9 @@
+from six import text_type
 from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
-from django.utils import six
+
 from django.utils.encoding import force_text, force_bytes
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.http import  urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from authentication.models import User
@@ -11,8 +12,7 @@ from datetime import date
 class TokenGenerator(PasswordResetTokenGenerator):
     def _make_hash_value(self, user, timestamp):
         return (
-            six.text_type(user.pk) + six.text_type(timestamp) +
-            six.text_type
+            text_type(user.pk) + text_type(timestamp) + text_type(user.is_active)
         )
 
 account_activation_token = TokenGenerator()
@@ -30,7 +30,7 @@ class SendEmail():
             'action_url':"http://",
             'user':user,
             'domain':current_site.domain,
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8'),
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
             'token':token
         })
 
@@ -38,4 +38,4 @@ class SendEmail():
         mail.content_subtype = 'html'
         mail.send()
 
-        return (token, urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8'))
+        return (token, urlsafe_base64_encode(force_bytes(user.pk)))

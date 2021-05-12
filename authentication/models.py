@@ -61,7 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def token(self):
-        return _generate_jwt_token()
+        return self._generate_jwt_token()
 
     def get_full_name(self): 
         return self.username
@@ -78,7 +78,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             "email":self.email, 
             "is_verified":self.is_verified, 
             "exp":int(dt.strftime('%s'))
-        }, settings.dev.SECRET_KEY, algorithm=HS256 )
+        }, settings.dev.SECRET_KEY, algorithm="HS256" )
 
         return token.decode('utf-8')
 

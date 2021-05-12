@@ -47,7 +47,7 @@ ROOT_URLCONF = 'zendoc.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -110,12 +110,12 @@ LOGGING = {
         }
     },
     "loggers": {
-        "main": {
+        "authentication": {
             "handlers": ["console"],
             "level": "DEBUG",
             "propagate": True,
         },
-        "booktime": {
+        "zendoc": {
             "handlers": ["console"],
             "level": "DEBUG",
             "propagate": True,
@@ -153,10 +153,7 @@ CORS_ORIGIN_WHITELIST = [
 #RESTFRAMEWORK
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-       
+        'authentication.backends.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
 

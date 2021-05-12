@@ -15,6 +15,7 @@ django-filter = "*"
 django-extensions = "*"
 pygraphviz = "*"
 python-dateutil = "*"
+django-utils-six = "*"
 
 [dev-packages]
 

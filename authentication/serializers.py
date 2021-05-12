@@ -25,13 +25,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ["email", "username", "password", "token"]
 
     def validate(self, data):
-        
+
+        password = data.get("password", None)
+
         if not re.match(r"^(?=.*[A-Z])(?=.*[a-z]).*", password):
             raise serializers.ValidationError(
                 "A password must contains atleast one small letter and one capital letter"
             )
 
-        elif not re.match(r"^(?=.*[0-9].*", password):
+        elif not re.match(r"^(?=.*[0-9]).*", password):
             raise serializers.ValidationError(
                 " A password must contain atleast one number"
             )
