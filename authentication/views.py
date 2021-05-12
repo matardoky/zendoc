@@ -15,15 +15,15 @@ logger = logging.getLogger(__name__)
 
 class RegistrationAPIView(APIView):
     permission_classes = (AllowAny,)
+    renderer_classes =[UserJSONRenderer]
     serializer_class = RegistrationSerializer
-    renderer_class = (UserJSONRenderer,)
 
     def post(self, request):
-        user = request.data
+        user = request.data.get("user", {})
 
         logger.info(
             "USER",
-            user.get("email", None),
+            user.get("email", None)
         )
 
         serializer = self.serializer_class(data=user)
