@@ -1,6 +1,10 @@
 from datetime import datetime, date
 import logging
 
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
+from django.http.response import HttpResponse
+
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -9,7 +13,7 @@ from rest_framework.status import HTTP_201_CREATED
 from authentication.renderers import UserJSONRenderer
 from authentication.models import User
 from authentication.serializers import RegistrationSerializer
-from authentication.verification import SendEmail
+from authentication.verification import SendEmail, account_activation_token
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +37,29 @@ class RegistrationAPIView(APIView):
         SendEmail().send_verification_email(user.get('email', None), request)
 
         return Response(serializer.data, status=HTTP_201_CREATED)
+
+
+class Activate(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        
+        if user is not None and account_activation_token(user, token):
+            user.is_active = True
+            user.is_verified = True
+            user.save()
+
+            return HttpResponse('Thank you for your email confirmation. Now you can login your account')
+        else:
+            return HttpResponse('Activation link is invalid !')
+
+            
 
 
 
