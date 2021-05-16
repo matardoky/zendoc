@@ -1,0 +1,30 @@
+{% autoescape off %}
+    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify your email address</title>
+</head>
+<body>
+    <a class="email-masthead_name">Hi {{ user.username }},</a>
+    <h1>Verify your email address</h1>
+    <p>Thanks for signing up for Authors Haven! We're excited to have you.</p>
+    <a href=http://{{ domain }}{% url 'authentication:activate' uidb64=uid token=token %} class="button button--blue" style="color:#ffffff;">Verify Email</a>
+    <p>Thanks,
+        <br>The Authors Haven Team
+    </p>
+
+    <p class="sub">If you’re having trouble clicking the button, copy this link to your browser
+        <a href=http://{{ domain }}{% url 'authentication:activate' uidb64=uid token=token %}>
+            http://{{ domain }}{% url 'authentication:activate' uidb64=uid token=token %}
+        </a>
+    </p>
+
+</body>
+</html>
+{% endautoescape %}
+
+
