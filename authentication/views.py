@@ -1,19 +1,20 @@
 from datetime import datetime, date
 import logging
 
-from django.utils.encoding import force_text
-from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.http.response import HttpResponse
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK
+from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_404_NOT_FOUND
 
 from authentication.renderers import UserJSONRenderer
 from authentication.models import User
 from authentication.serializers import (
-    RegistrationSerializer, LoginSerializer, PasswordResetSerializer
+    RegistrationSerializer, LoginSerializer, PasswordResetSerializer,
+    UserSerializer
 
 )
 from authentication.verification import SendEmail, account_activation_token
@@ -79,14 +80,49 @@ class LoginAPIView(APIView):
         
         return Response(serializer.data, status=HTTP_200_OK)
 
+
+class Reset(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, uidb64, token):
+
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and account_activation_token(user, token):
+            user.is_reset = True
+            user.save()
+
+            encode_email = urlsafe_base64_encode(force_bytes(user.email))
+
+            return Response({"token": encode_email})
+        else:
+            Response({"msg":"Error"})
+
+
+
+
 class PasswordResetAPIView(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     renderer_classes=(UserJSONRenderer,)
     serializer_class = PasswordResetSerializer
 
     def post(self, request):
-        pass
+        user = request.data.get('user', {})
+
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+
+        if not serializer.data["email"] == 'False':
+            SendEmail().send_password_reset_email(user.get("email"), request)
+            return Response({"msg":"Success, reset email send"}, status=HTTP_200_OK)
+        
+        return Response({"msg":"Email doesn't exist, register instead"}, status=HTTP_404_NOT_FOUND)
 
 
 
