@@ -8,16 +8,20 @@ from django.http.response import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED
+from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK
 
 from authentication.renderers import UserJSONRenderer
 from authentication.models import User
-from authentication.serializers import RegistrationSerializer
+from authentication.serializers import (
+    RegistrationSerializer, LoginSerializer
+
+)
 from authentication.verification import SendEmail, account_activation_token
 
 logger = logging.getLogger(__name__)
 
 class RegistrationAPIView(APIView):
+
     permission_classes = (AllowAny,)
     renderer_classes =[UserJSONRenderer]
     serializer_class = RegistrationSerializer
@@ -59,7 +63,28 @@ class Activate(APIView):
         else:
             return HttpResponse('Activation link is invalid !')
 
-            
+
+class LoginAPIView(APIView):
+
+    permission_classes=(AllowAny,)
+    renderer_classes=(UserJSONRenderer,)
+    serializer_class = LoginSerializer
+
+    def post(self, request):
+
+        user = request.data.get('user', {})
+
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        
+        return Response(serializer.data, status=HTTP_200_OK)
+
+
+
+    
+
+
+
 
 
 
