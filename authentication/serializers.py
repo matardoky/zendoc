@@ -5,7 +5,6 @@ from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 
 from rest_framework import serializers
-from rest_framework.serializers import Serializer
 from rest_framework.validators import UniqueValidator
 
 from authentication.backends import JWTAuthentication
@@ -48,13 +47,13 @@ class LoginSerializer(serializers.Serializer):
 
     email = serializers.CharField(max_length=255)
     username = serializers.CharField(max_length=255, read_only=True)
-    password = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=255, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
 
-        email = data.get("email", None)
-        password = data.get("password", None)
+        email = data.get('email', None)
+        password = data.get('password', None)
 
         if email is None:
             raise serializers.ValidationError(
@@ -82,5 +81,24 @@ class LoginSerializer(serializers.Serializer):
             "username": user.username,
             "token":user.token
         }
+
+class  PasswordResetSerializer(serializers.Serializer):
+
+    email = serializers.EmailField()
+
+    def validate(self, data):
+
+        email = data.get('email', None)
+
+        if not User.objects.get(email=email).exists():
+            return {'email': 'False'}
+        
+        return {'email':'True'}
+
+
+class UserSerializer(serializers.ModelSerializer):
+    pass
+
+
 
       

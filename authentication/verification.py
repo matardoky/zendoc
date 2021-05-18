@@ -39,3 +39,24 @@ class SendEmail():
         mail.send()
 
         return (token, urlsafe_base64_encode(force_bytes(user.pk)))
+
+    def send_password_reset_email(self, email, request):
+        user = User.objects.filter(email=email).first()
+
+        subject = "Forgot your Authors Haven password"
+        token = account_activation_token.make_token(user)
+        current_site = get_current_site(request)
+
+        body = render_to_string('password-reset-email.html', context={
+            'action_url':"https://",
+            'user':user,
+            'domain': "ah-titans.heroku.com",
+            'token':token
+        })
+
+        mail = EmailMessage(subject, body, "mddiop@gmail.com", to=[email])
+        mail.content_subtype = "html"
+        mail.send()
+
+        return(token, urlsafe_base64_encode(force_bytes(user.pk)))
+

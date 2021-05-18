@@ -78,9 +78,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             "email":self.email, 
             "is_verified":self.is_verified, 
             "exp":int(dt.strftime('%s'))
-        }, settings.dev.SECRET_KEY, algorithm="HS256" )
+        }, settings.SECRET_KEY, algorithm="HS256" )
 
-        return token.decode('utf-8')
+        return token
 
     
 
