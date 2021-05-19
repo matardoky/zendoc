@@ -2,7 +2,9 @@ from django.urls import path
 from rest_framework import routers
 
 from authentication.views import (
-    RegistrationAPIView, Activate, LoginAPIView, Reset
+    RegistrationAPIView, Activate, LoginAPIView,
+    Reset,
+
 )
 
 app_name ="authentication"

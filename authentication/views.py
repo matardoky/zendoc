@@ -55,7 +55,7 @@ class Activate(APIView):
         except(TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
         
-        if user is not None and account_activation_token(user, token):
+        if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
             user.is_verified = True
             user.save()
@@ -81,31 +81,6 @@ class LoginAPIView(APIView):
         return Response(serializer.data, status=HTTP_200_OK)
 
 
-class Reset(APIView):
-    permission_classes = (AllowAny,)
-
-    def get(self, request, uidb64, token):
-
-        try:
-            uid = force_text(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-
-        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-
-        if user is not None and account_activation_token(user, token):
-            user.is_reset = True
-            user.save()
-
-            encode_email = urlsafe_base64_encode(force_bytes(user.email))
-
-            return Response({"token": encode_email})
-        else:
-            Response({"msg":"Error"})
-
-
-
-
 class PasswordResetAPIView(APIView):
 
     permission_classes = (AllowAny,)
@@ -125,6 +100,32 @@ class PasswordResetAPIView(APIView):
         return Response({"msg":"Email doesn't exist, register instead"}, status=HTTP_404_NOT_FOUND)
 
 
+class Reset(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, uidb64, token):
+
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_reset = True
+            user.save()
+
+            encode_email = urlsafe_base64_encode(force_bytes(user.email))
+
+            return Response({"token": encode_email})
+        else:
+            Response({"msg":"Error"})
+
+class PasswordResetConfirmAPIView(APIView):
+
+    def post(self, request):
+        pass
 
 
     

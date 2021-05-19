@@ -82,7 +82,7 @@ class LoginSerializer(serializers.Serializer):
             "token":user.token
         }
 
-class  PasswordResetSerializer(serializers.Serializer):
+class PasswordResetSerializer(serializers.Serializer):
 
     email = serializers.EmailField()
 
@@ -95,6 +95,9 @@ class  PasswordResetSerializer(serializers.Serializer):
         
         return {'email':'True'}
 
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    pass
 
 class UserSerializer(serializers.ModelSerializer):
     pass
