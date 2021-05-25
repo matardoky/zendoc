@@ -1,8 +1,6 @@
 from datetime import datetime
-from profiles.models import Profile
 from django.db import models
 
-from django.utils.text import slugify
 from mptt.models import MPTTModel, TreeForeignKey
 
 

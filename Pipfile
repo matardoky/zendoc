@@ -17,6 +17,7 @@ pygraphviz = "*"
 python-dateutil = "*"
 django-utils-six = "*"
 django-mptt = "*"
+django-notifications-hq = "*"
 
 [dev-packages]
 

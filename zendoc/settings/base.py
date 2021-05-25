@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_extensions',
     'mptt',
+    'notifications',
 ]
 
 SITE_ID = 1
