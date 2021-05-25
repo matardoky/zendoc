@@ -28,3 +28,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             followed = instance
 
             return follower.is_following(followed)
+
+
+

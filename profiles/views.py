@@ -35,3 +35,76 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class UserFollowAPIView(APIView):
+    
+    permission_classes = (IsAuthenticated,)
+    renderer_classes = (ProfileJSONRenderer,)
+    serializer_class = ProfileSerializer
+
+    def delete(self, request, username=None):
+
+        follower = request.user.profile
+
+        try:
+            followed = Profile.objects.get(user__username=username)
+        except Profile.DoesNotExist:
+            raise NotFound('A profile for user {} does not exist.'.format(username))
+
+        if follower.pk is followed.pk:
+            raise serializers.ValidationError('You can not unfollow yourself.')
+
+        follower.unfollow(followed)
+
+        serializer = self.serializer_class(followed, context={
+            'request': request
+        })
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    def post(self, request, username=None):
+
+        follower = self.request.user.profile
+
+        try:
+            followed = Profile.objects.get(user__username=username)
+        except Profile.DoesNotExist:
+            raise NotFound('A profile for user {} does not exist.'.format(username))
+
+        if follower.pk is followed.pk:
+            raise serializers.ValidationError('You can not follow yourself')
+
+        follower.follow(followed)
+
+        serializer = self.serializer_class(followed, context={
+            'request':request
+        })
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+
+class FollowingRetrieve(ListAPIView):
+
+    permission_classes = (IsAuthenticated,)
+    renderer_classes = (FollowingJSONRenderer,)
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        return self.request.user.profile.follows.all()
+
+
+class FollowerRetrieve(ListAPIView):
+
+    permission_classes =(IsAuthenticated,)
+    renderer_classes = (FollowersJSONRenderer,)
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        return self.request.profile.follower.all()
+            
+
+            
+
+
+    
+    
