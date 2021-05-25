@@ -28,42 +28,46 @@ def pre_save_article_receiver(sender, instance, *args, **kwargs):
 @receiver(post_save, sender=Article)
 def notify_followers_new_articles(sender, instance, created, **kwargs):
 
-    user = User.objects.get(pk=instance.author.user.id)
-    title = instance.title
-    author = instance.author.user.get_full_name()
-    recipients = []
+    if created:
 
-    for follower in user.profile.follower.all():
-        if follower.user.get_notified:
-            recipients.append(follower.user)
-        SendEmail().send_article_notification_email(
-            follower.user.email, title, author
+        user = User.objects.get(pk=instance.author.user.id)
+        title = instance.title
+        author = instance.author.user.get_full_name()
+        recipients = []
+    
+        for follower in user.profile.follower.all():
+            if follower.user.get_notified:
+                recipients.append(follower.user)
+            SendEmail().send_article_notification_email(
+                follower.user.email, title, author
+            )
+        notify.send(instance, recipients=recipients, verb='was posted', slug=instance.slug,
+            title = instance.title, author=instance.author.user.get_full_name()
         )
-    notify.send(instance, recipients=recipients, verb='was posted', slug=instance.slug,
-        title = instance.title, author=instance.author.user.get_full_name()
-    )
 
 
 @receiver(post_save, sender=Comment)
 def notify_comments_favorited_articles(sender, instance, created, **kwargs):
 
-    users = instance.article.users_fav_articles.all()
-    title = instance.article.title
-    slug = instance.article.slug
-    author = instance.article.author.user.get_full_name()
-    commenter = instance.author.user.get_full_name()
-    comment = instance.body
-
-    recipients = []
-    for user in users:
-        if user.user.get_notified:
-            recipients.append(user.user)
-        SendEmail().send_comment_notification_email(
-            user.user.email, title, author, commenter
-        )
+    if created:
+        
+        users = instance.article.users_fav_articles.all()
+        title = instance.article.title
+        slug = instance.article.slug
+        author = instance.article.author.user.get_full_name()
+        commenter = instance.author.user.get_full_name()
+        comment = instance.body
     
-    notify.send(instance, recipients=recipients, verb='was commented on', 
-        slug=slug, title=title, author=author,commenter=commenter, comment=comment
-    )
+        recipients = []
+        for user in users:
+            if user.user.get_notified:
+                recipients.append(user.user)
+            SendEmail().send_comment_notification_email(
+                user.user.email, title, author, commenter
+            )
+        
+        notify.send(instance, recipients=recipients, verb='was commented on', 
+            slug=slug, title=title, author=author,commenter=commenter, comment=comment
+        )
 
 
