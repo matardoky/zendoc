@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from articles.models import Tag
 
-class TagSerializer(serializers.RelatedField):
+class TagRelatedField(serializers.RelatedField):
 
     def get_queryset(self):
         result = Tag.objects.all()
@@ -14,6 +14,6 @@ class TagSerializer(serializers.RelatedField):
             slug = data.lower()
         )
         return tag
-        
+
     def to_representation(self, value):
         return value.tag
