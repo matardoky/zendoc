@@ -1,6 +1,5 @@
 import json
 
-from django.core.serializers.json import DjangoJSONEncoder
 from rest_framework import serializers, status
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import RetrieveAPIView, ListAPIView

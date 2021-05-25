@@ -1,4 +1,9 @@
+from datetime import datetime
+from profiles.models import Profile
 from django.db import models
+
+from django.utils.text import slugify
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class TimestamModel(models.Model):
@@ -27,6 +32,51 @@ class Article(TimestamModel):
     def __str__(self):
         return self.title
 
+class Comment(MPTTModel, TimestamModel):
+
+    body = models.TextField()
+    comment_likes = models.ManyToManyField('authentication.User', related_name='comment_likes', blank=True)
+    comment_dislikes = models.ManyToManyField(
+        'authentication.User', 
+        related_name='comment_dislikes', 
+        blank=True
+    )
+    parent = TreeForeignKey(
+        'self', 
+        related_name='reply_set', 
+        null=True, 
+        on_delete=models.CASCADE
+    )
+    article = models.ForeignKey(
+        'articles.Article',
+        related_name='comments',
+        on_delete=models.CASCADE
+    )
+    author = models.ForeignKey(
+        'profiles.Profile',
+        related_name='comments',on_delete=models.CASCADE
+    )
+
+
+class CommentEditHistory(models.Model):
+
+    body = models.TextField(null=False)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    create_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Rating(TimestamModel):
+
+    rater = models.ForeignKey('profiles.Profile', on_delete=models.CASCADE)
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='rating'
+    )
+    counter = models.IntegerField(default=0)
+    stars = models.IntegerField(null=True)
+
 
 class Tag(models.Model):
     tag = models.CharField(max_length=255)
@@ -34,4 +84,10 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.tag 
+
+class Bookmarks(models.Model):
+
+    user = models.ForeignKey('profiles.Profile', on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, related_name='bookmarked', on_delete=models.CASCADE)
+    date = models.DateTimeField(default=datetime.now, blank=True)
 

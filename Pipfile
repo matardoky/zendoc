@@ -16,6 +16,7 @@ django-extensions = "*"
 pygraphviz = "*"
 python-dateutil = "*"
 django-utils-six = "*"
+django-mptt = "*"
 
 [dev-packages]
 
