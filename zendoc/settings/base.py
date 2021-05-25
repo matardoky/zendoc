@@ -26,6 +26,9 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'scheduler.apps.SchedulerConfig',
     'profiles.apps.ProfilesConfig',
+    'articles.apps.ArticlesConfig',
+
+    
     'django_filters',
     'django_extensions',
 ]
