@@ -15,19 +15,19 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('username', 'bio', 'image', 'interests', 'following')
         read_only_fields = ('username',)
 
-        def get_following(self, instance):
-            request = self.context.get('request', None)
+    def get_following(self, instance):
+        request = self.context.get('request', None)
 
-            if request is None:
-                return False
-            
-            if not request.user.is_authenticated:
-                return False
+        if request is None:
+            return False
+        
+        if not request.user.is_authenticated:
+            return False
 
-            follower = request.user.profile
-            followed = instance
+        follower = request.user.profile
+        followed = instance
 
-            return follower.is_following(followed)
+        return follower.is_following(followed)
 
 
 
