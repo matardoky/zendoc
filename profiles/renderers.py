@@ -13,7 +13,7 @@ class ProfileJSONRenderer(JSONRenderer):
                     'profile':data
                 })
             return json.dumps({
-                'profile':data
+                'profiles':data
             })
 
 class FollowersJSONRenderer(JSONRenderer):
