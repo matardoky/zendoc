@@ -52,7 +52,7 @@ class CommentSerializer(serializers.ModelSerializer):
         return False
 
     
-class ArticleSerialzer(serializers.ModelSerializer):
+class ArticleSerializer(serializers.ModelSerializer):
 
     title = serializers.CharField(required=True)
     body = serializers.CharField(required=True)

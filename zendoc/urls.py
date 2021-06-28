@@ -18,6 +18,9 @@ urlpatterns = [
 
     path("api/", include('authentication.urls')),
     path("api/", include('profiles.urls')),
+    path("api/", include('articles.urls')),
+
+
 
     # path('', include("main.urls")),
 ]

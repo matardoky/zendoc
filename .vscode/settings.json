@@ -4,5 +4,6 @@
     "files.exclude": {
         "**/*.pyc": true
     },
+    "python.pythonPath": "/home/diop/.local/share/virtualenvs/zendoc-UVY7YsTb/bin/python",
 
 }
