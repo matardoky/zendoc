@@ -61,6 +61,7 @@ class ArticleViewSet(
         else: 
             serializer = self.get_serializer(queryset, many=True)
             return Response(serializer.data, status = HTTP_200_OK)
+            
         return output
 
     def  retrieve(self, request, slug):

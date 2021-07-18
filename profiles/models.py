@@ -4,7 +4,7 @@ from django.conf import settings
 
 class Profile(models.Model):
 
-    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE)
+    user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
 
     bio = models.TextField(blank=True)
     image = models.TextField(blank=True)
